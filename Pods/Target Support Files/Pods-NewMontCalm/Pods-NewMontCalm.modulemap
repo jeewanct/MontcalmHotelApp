@@ -1,0 +1,6 @@
+framework module Pods_NewMontCalm {
+  umbrella header "Pods-NewMontCalm-umbrella.h"
+
+  export *
+  module * { export * }
+}
