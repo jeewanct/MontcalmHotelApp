@@ -20,6 +20,7 @@ extension Explore{
     // MARK: TableView Delegates
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Row selected at index", indexPath.item)
+        self.present(UINavigationController(rootViewController:Offers()), animated: true, completion: nil)
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -22,9 +22,10 @@ class BookHotelNowCell: UICollectionViewCell{
     }
     
     func addViews(){
-        backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
+       // backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         addSubview(contentTable)
-        contentTable.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
+        contentTable.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+
         
     }
     
@@ -110,9 +111,9 @@ class RateTypeCell: UICollectionViewCell{
     }
 
     func addViews(){
-        backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
+       // backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         addSubview(contentTable)
-        contentTable.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
+        contentTable.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
 
     }
 
@@ -136,7 +137,7 @@ class RateTypeTableCell: UITableViewCell{
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
         addViews()
-        backgroundColor = .white
+       // backgroundColor = .white
     }
 
     func setup(){
@@ -148,8 +149,9 @@ class RateTypeTableCell: UITableViewCell{
 
     func addViews(){
         addSubview(hotelImage)
-        hotelImage.anchorToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor)
-        hotelImage.heightAnchor.constraint(equalToConstant: Constants.StandardSize.TABLEROWHEIGHT - UIScreen.main.bounds.height * 0.07).isActive = true
+        hotelImage.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
+//        hotelImage.anchorToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor)
+//        hotelImage.heightAnchor.constraint(equalToConstant: Constants.StandardSize.TABLEROWHEIGHT - UIScreen.main.bounds.height * 0.07).isActive = true
 
         let selectLabel = UILabel()
         selectLabel.translatesAutoresizingMaskIntoConstraints = false

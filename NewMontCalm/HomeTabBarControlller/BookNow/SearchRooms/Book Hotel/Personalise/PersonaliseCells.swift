@@ -24,6 +24,7 @@ class PersonliseCell: UICollectionViewCell{
     
     func addViews(){
         addSubview(contentTable)
+
         contentTable.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
         
         
@@ -45,6 +46,7 @@ class PersonliseCell: UICollectionViewCell{
 }
 
 class PersonaliseTable: UITableViewCell {
+
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -63,7 +65,7 @@ class PersonaliseTable: UITableViewCell {
         priceButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.2).isActive = true
         
         addSubview(backgroundImage)
-        backgroundImage.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: priceButton.topAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
+        backgroundImage.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: priceButton.topAnchor, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
     }
     
     let backgroundImage: UIImageView = {

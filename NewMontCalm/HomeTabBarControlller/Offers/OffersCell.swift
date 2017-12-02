@@ -11,7 +11,7 @@ import UIKit
 class OffersCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .white
+        backgroundColor = .clear
         addViews()
     }
     
@@ -36,7 +36,7 @@ class OffersCell: UITableViewCell {
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .white
+        cv.backgroundColor = .clear
         cv.dataSource = self
         cv.delegate = self
         cv.showsHorizontalScrollIndicator = false
@@ -72,22 +72,21 @@ class OffersViewCell: UICollectionViewCell {
         //exploreImage.anchorToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor)
         exploreImage.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
         
-        let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-        effectView.alpha = 0.5
-        exploreImage.addSubview(effectView)
-        effectView.anchorToTop(top: exploreImage.topAnchor, left: exploreImage.leftAnchor, bottom: exploreImage.bottomAnchor, right: exploreImage.rightAnchor)
+        let blackView = BlackView()
+        exploreImage.addSubview(blackView)
+        blackView.anchorToTop(top: exploreImage.topAnchor, left: exploreImage.leftAnchor, bottom: exploreImage.bottomAnchor, right: exploreImage.rightAnchor)
         
         exploreImage.addSubview(imageHeading)
         imageHeading.centerXAnchor.constraint(equalTo: exploreImage.centerXAnchor).isActive = true
         imageHeading.centerYAnchor.constraint(equalTo: exploreImage.centerYAnchor).isActive = true
         
         addSubview(knowMoreButton)
-        knowMoreButton.anchorWithConstantsToTop(top: exploreImage.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 8)
+        knowMoreButton.anchorWithConstantsToTop(top: exploreImage.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 8)
         //knowMoreButton.anchorToTop(top: exploreImage.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil)
-        knowMoreButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
+//        knowMoreButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
         
-        addSubview(bookNowButton)
-        bookNowButton.anchorWithConstantsToTop(top: exploreImage.bottomAnchor, left: knowMoreButton.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 8)
+//        addSubview(bookNowButton)
+//        bookNowButton.anchorWithConstantsToTop(top: exploreImage.bottomAnchor, left: knowMoreButton.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 8)
        // bookNowButton.anchorToTop(top: exploreImage.bottomAnchor, left: knowMoreButton.rightAnchor, bottom: bottomAnchor, right: rightAnchor)
         
     }
@@ -111,21 +110,21 @@ class OffersViewCell: UICollectionViewCell {
         return lbl
     }()
     
-    lazy var bookNowButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 14)
-        btn.setTitle("BOOK NOW", for: .normal)
-        // btn.addTarget(self, action: #selector(searchRooms), for: .touchUpInside)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        return btn
-    }()
-    
+//    lazy var bookNowButton: UIButton = {
+//        let btn = UIButton(type: .system)
+//        btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
+//        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+//        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 14)
+//        btn.setTitle("BOOK NOW", for: .normal)
+//        // btn.addTarget(self, action: #selector(searchRooms), for: .touchUpInside)
+//        btn.translatesAutoresizingMaskIntoConstraints = false
+//        return btn
+//    }()
+
     
     lazy var knowMoreButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.backgroundColor = #colorLiteral(red: 0.3254901961, green: 0.3254901961, blue: 0.3254901961, alpha: 1)
+        btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
         btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
         btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 14)
         btn.setTitle("KNOW MORE", for: .normal)

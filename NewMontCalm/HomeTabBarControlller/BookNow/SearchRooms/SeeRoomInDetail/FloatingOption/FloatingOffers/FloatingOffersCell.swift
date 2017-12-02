@@ -28,11 +28,9 @@ class FloatingOffersCell: UITableViewCell {
         backgroundImage.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
         backgroundImage.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.75).isActive = true
 
-        let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-        effectView.alpha = 0.5
-        effectView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundImage.addSubview(effectView)
-        effectView.anchorToTop(top: backgroundImage.topAnchor, left: backgroundImage.leftAnchor, bottom: backgroundImage.bottomAnchor, right: backgroundImage.rightAnchor)
+        let blackView  = BlackView()
+        backgroundImage.addSubview(blackView)
+        blackView.anchorToTop(top: backgroundImage.topAnchor, left: backgroundImage.leftAnchor, bottom: backgroundImage.bottomAnchor, right: backgroundImage.rightAnchor)
 
         addSubview(knowMoreButton)
         knowMoreButton.anchorWithConstantsToTop(top: backgroundImage.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
@@ -41,7 +39,39 @@ class FloatingOffersCell: UITableViewCell {
         addSubview(bookNowButton)
         bookNowButton.anchorWithConstantsToTop(top: backgroundImage.bottomAnchor, left: knowMoreButton.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 8, rightConstant: 16)
 
+
+        addSubview(offerLabel)
+        offerLabel.anchorWithConstantsToTop(top: backgroundImage.topAnchor, left: backgroundImage.leftAnchor, bottom: nil, right: backgroundImage.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+
+        addSubview(offerDescLabel)
+        offerDescLabel.anchorWithConstantsToTop(top: offerLabel.bottomAnchor, left: backgroundImage.leftAnchor, bottom: nil, right: backgroundImage.rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+
     }
+
+
+    let offerLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.textColor = .white
+        //        lbl.adjustsFontSizeToFitWidth = true
+        //        lbl.minimumScaleFactor = 0.1
+        lbl.text = "Offer 1"
+        lbl.font = UIFont.boldSystemFont(ofSize: 17)
+        return lbl
+    }()
+
+    let offerDescLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.textColor = .white
+        lbl.numberOfLines = 0
+        //        lbl.adjustsFontSizeToFitWidth = true
+        //        lbl.minimumScaleFactor = 0.1
+        lbl.text = "The Montcalm London Marble Arch is the process for converting"
+        lbl.font = UIFont.boldSystemFont(ofSize: 14)
+        return lbl
+    }()
+
 
     let backgroundImage: UIImageView = {
         let iv = UIImageView()

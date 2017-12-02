@@ -20,8 +20,8 @@ class CardView: UIView{
         layer.cornerRadius = 0
         let shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 0)
         layer.masksToBounds = false
-        layer.shadowColor = UIColor.gray.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 0);
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 5);
         layer.shadowOpacity = 0.3
         layer.shadowPath = shadowPath.cgPath
     }

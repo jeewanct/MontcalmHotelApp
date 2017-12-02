@@ -21,6 +21,17 @@ class FacilitesCollectionCell: UICollectionViewCell  {
     func addViews(){
         addSubview(backgroundImage)
         backgroundImage.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: 0)
+
+        let blackView = UIView()
+        blackView.translatesAutoresizingMaskIntoConstraints = false
+        blackView.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.6)
+
+        addSubview(blackView)
+        blackView.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: 0)
+
+        addSubview(aminityLabel)
+        aminityLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        aminityLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
       //  backgroundImage.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
     }
     
@@ -31,6 +42,14 @@ class FacilitesCollectionCell: UICollectionViewCell  {
         iv.clipsToBounds = true
         iv.image = #imageLiteral(resourceName: "tempHotel")
         return iv
+    }()
+
+    let aminityLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.text = "TV Channels"
+        lbl.textColor = .white
+        return lbl
     }()
 }
 

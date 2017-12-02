@@ -15,9 +15,7 @@ extension LoginRegister{
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height * 0.65
-    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LoginRegisterCell", for: indexPath) as! LoginRegisterCell
         cell.selectionStyle = .none
@@ -30,6 +28,7 @@ extension LoginRegister{
 extension LoginRegister{
     
     func setup(){
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.register(LoginRegisterCell.self, forCellReuseIdentifier: "LoginRegisterCell")
@@ -93,12 +92,12 @@ extension LoginRegisterCell: UITextFieldDelegate{
             CustomAlerts.shared.showAlert(alertTitle: "Warning", alertMessage: "Email or password Empty", actionTitle: "OK", controller: LoginRegisterInstance!)
         }else{
 
-            ApiService.shared.postMethod(url: Constants.CustomApis.HOMEURL + Constants.CustomApis.LOGIN, bodyParameter: ["":""], completion: { (data) in
-
-                DispatchQueue.main.async {
+//            ApiService.shared.postMethod(url: Constants.CustomApis.HOMEURL + Constants.CustomApis.LOGIN, bodyParameter: ["":""], completion: { (data) in
+//
+//                DispatchQueue.main.async {
                     self.LoginRegisterInstance?.handleLogin(email: email, password: password)
-                }
-            })
+//                }
+//            })
         }
 
     }

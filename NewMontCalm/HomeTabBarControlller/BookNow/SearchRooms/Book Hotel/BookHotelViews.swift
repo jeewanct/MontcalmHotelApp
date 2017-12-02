@@ -51,18 +51,18 @@ extension BookHotelNow{
 
         view.addSubview(containerView)
         containerView.anchorToTop(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
-        containerView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.1).isActive = true
+        containerView.heightAnchor.constraint(equalToConstant:49).isActive = true
 
         containerView.addSubview(comparePricesButton)
         comparePricesButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        comparePricesButton.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.6).isActive = true
-        comparePricesButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40) / 2).isActive = true
-        comparePricesButton.leftAnchor.constraint(equalTo: containerView.leftAnchor,constant: 16).isActive = true
+        comparePricesButton.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.8).isActive = true
+        comparePricesButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 32) / 2).isActive = true
+        comparePricesButton.leftAnchor.constraint(equalTo: containerView.leftAnchor,constant: 8).isActive = true
 
         containerView.addSubview(bookNowButton)
         bookNowButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        bookNowButton.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.6).isActive = true
-        bookNowButton.rightAnchor.constraint(equalTo: containerView.rightAnchor,constant: -16).isActive = true
+        bookNowButton.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.8).isActive = true
+        bookNowButton.rightAnchor.constraint(equalTo: containerView.rightAnchor,constant: -8).isActive = true
         bookNowButton.leftAnchor.constraint(equalTo: comparePricesButton.rightAnchor,constant: 8).isActive = true
 
     }

@@ -35,10 +35,11 @@ extension BookCell {
     func addViews(){
 
         // All Montcalm Hotels
+        
         addSubview(allHotelsButton)
         allHotelsButton.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 20, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
         //allHotelsButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1).isActive = true
-        allHotelsButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.06).isActive = true
+        allHotelsButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.063).isActive = true
 
 
 
@@ -58,8 +59,8 @@ extension BookCell {
         checkInButton.anchorWithConstantsToTop(top: allHotelsButton.bottomAnchor, left: leftAnchor, bottom: nil, right: checkOutButton.leftAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
         checkOutButton.anchorWithConstantsToTop(top: allHotelsButton.bottomAnchor, left: nil, bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 0, bottomConstant: 0, rightConstant: 16)
         checkInButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 44) / 2 ).isActive = true
-        checkInButton.heightAnchor.constraint(equalTo: allHotelsButton.heightAnchor, multiplier: 2.5).isActive = true
-        checkOutButton.heightAnchor.constraint(equalTo: allHotelsButton.heightAnchor, multiplier: 2.5).isActive = true
+        checkInButton.heightAnchor.constraint(equalTo: allHotelsButton.heightAnchor, multiplier: 2.3).isActive = true
+        checkOutButton.heightAnchor.constraint(equalTo: allHotelsButton.heightAnchor, multiplier: 2.3).isActive = true
 
 
         let checkInLabel  = UILabel()
@@ -67,8 +68,9 @@ extension BookCell {
         checkInLabel.text = "Check In"
         checkInLabel.textColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
         checkInLabel.adjustsFontSizeToFitWidth = true
-        checkInLabel.minimumScaleFactor = 0.1
-        checkInLabel.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 14)
+        checkInLabel.baselineAdjustment = .alignCenters
+        checkInLabel.minimumScaleFactor = 0.5
+        checkInLabel.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 13)
         checkInButton.addSubview(checkInLabel)
         checkInLabel.anchorWithConstantsToTop(top: checkInButton.topAnchor, left: checkInButton.leftAnchor, bottom: nil, right: checkInButton.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
         checkInLabel.heightAnchor.constraint(equalTo: checkInButton.heightAnchor, multiplier: 0.13).isActive = true
@@ -77,10 +79,11 @@ extension BookCell {
         let checkOutLabel  = UILabel()
         checkOutLabel.translatesAutoresizingMaskIntoConstraints = false
         checkOutLabel.text = "Check Out"
+        checkOutLabel.baselineAdjustment = .alignCenters
         checkOutLabel.adjustsFontSizeToFitWidth = true
-        checkOutLabel.minimumScaleFactor = 0.1
+        checkOutLabel.minimumScaleFactor = 0.5
         checkOutLabel.textColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
-        checkOutLabel.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 14)
+        checkOutLabel.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 13)
 
         checkOutButton.addSubview(checkOutLabel)
         checkOutLabel.anchorWithConstantsToTop(top: checkOutButton.topAnchor, left: checkOutButton.leftAnchor, bottom: nil, right: checkOutButton.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
@@ -153,17 +156,17 @@ extension BookCell {
 
         termAndConditionButton.anchorWithConstantsToTop(top: ourPropertiesCollectionView.bottomAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
         termAndConditionButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40) / 2).isActive = true
-        termAndConditionButton.heightAnchor.constraint(equalTo: allHotelsButton.heightAnchor, multiplier: 0.9).isActive = true
+        termAndConditionButton.heightAnchor.constraint(equalTo: allHotelsButton.heightAnchor).isActive = true
 
 
         privacyStatmentButton.anchorWithConstantsToTop(top: ourPropertiesCollectionView.bottomAnchor, left: termAndConditionButton.rightAnchor , bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 8, bottomConstant: 16, rightConstant: 16)
 
-        privacyStatmentButton.heightAnchor.constraint(equalTo: allHotelsButton.heightAnchor, multiplier: 0.9).isActive = true
+        privacyStatmentButton.heightAnchor.constraint(equalTo: allHotelsButton.heightAnchor).isActive = true
 
         let socialCollectionView = SocialNetworkingView()
         addSubview(socialCollectionView)
-        socialCollectionView.anchorWithConstantsToTop(top: privacyStatmentButton.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 24, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
-        socialCollectionView.heightAnchor.constraint(equalToConstant: 126).isActive = true
+        socialCollectionView.anchorWithConstantsToTop(top: privacyStatmentButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 24, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+        socialCollectionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
 
     

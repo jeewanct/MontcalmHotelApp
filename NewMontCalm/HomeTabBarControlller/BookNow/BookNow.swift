@@ -36,6 +36,8 @@ class BookNow: UITableViewController{
         tableView.contentOffset = CGPoint(x: 0, y: -UIScreen.main.bounds.height * 0.3)
         tableView.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         tableView.separatorStyle = .none
+        tableView.rowHeight = UITableViewAutomaticDimension
+       // tableView.estimatedRowHeight = 2000
         tableView.register(BookCell.self, forCellReuseIdentifier: "BookCell")
         tableView.showsVerticalScrollIndicator = false
         navigationItem.title = ""

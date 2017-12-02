@@ -32,6 +32,8 @@ class FloatingBookView: UIView {
         tv.register(BookNowInformationCell.self, forCellReuseIdentifier: "BookNowInformationCell")
         tv.showsVerticalScrollIndicator = false
         tv.separatorStyle = .none
+        tv.rowHeight = UITableViewAutomaticDimension
+        tv.estimatedRowHeight = 2000
         tv.register(BookNowHotelListingCell.self, forCellReuseIdentifier: "BookNowHotelListingCell")
         return tv
     }()

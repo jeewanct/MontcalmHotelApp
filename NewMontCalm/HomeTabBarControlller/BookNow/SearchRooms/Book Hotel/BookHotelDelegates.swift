@@ -68,6 +68,7 @@ extension BookHotelNowCell: UITableViewDataSource, UITableViewDelegate, UIScroll
         
         return 0
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "roomCell", for: indexPath) as! RoomOffers
         cell.backgroundColor = .clear
@@ -75,11 +76,7 @@ extension BookHotelNowCell: UITableViewDataSource, UITableViewDelegate, UIScroll
         return cell
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }
+
     
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         return 16
@@ -91,23 +88,46 @@ extension BookHotelNowCell: UITableViewDataSource, UITableViewDelegate, UIScroll
         view.bookHotelCellIndex = self
         return view
     }
+
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return Constants.StandardSize.TABLEROWHEIGHT
+        return Constants.StandardSize.TABLEROWHEIGHT + UIScreen.main.bounds.height * 0.07 
     }
 
 
 
-//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//        if velocity.y > CGFloat(0){
-//            bookHotelNowInstance?.navigationController?.isNavigationBarHidden = true
-//            bookHotelNowInstance?.containerView.isHidden = true
-//            //  bookHotelNowInstance?.collectionView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//        }else{
-//            bookHotelNowInstance?.navigationController?.isNavigationBarHidden = false
-//            bookHotelNowInstance?.containerView.isHidden = false
-//            // bookHotelNowInstance?.collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
-//        }
-//    }
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if velocity.y > CGFloat(0){
+           // bookHotelNowInstance?.navigationController?.isNavigationBarHidden = true
+
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.9, options: .curveEaseIn, animations: {
+                 self.bookHotelNowInstance?.containerView.transform = CGAffineTransform(translationX: 0, y: 49)
+                
+
+            }, completion: nil)
+
+
+            
+
+
+
+            
+            //  bookHotelNowInstance?.collectionView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }else{
+           // bookHotelNowInstance?.navigationController?.isNavigationBarHidden = false
+
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.9, options: .curveEaseIn, animations: {
+                self.bookHotelNowInstance?.containerView.transform = .identity
+
+            }, completion: nil)
+
+
+
+
+
+            // bookHotelNowInstance?.collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
+        }
+    }
 
 
 

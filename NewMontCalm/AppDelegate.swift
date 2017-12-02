@@ -22,10 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         application.statusBarStyle = .lightContent
         window = UIWindow(frame: UIScreen.main.bounds)
+        UINavigationBar.appearance().backgroundColor = .white
         window?.makeKeyAndVisible()
         window?.rootViewController = HomeTabBarController()
         setAppearance()
         GMSServices.provideAPIKey(Constants.ApisUrl.GOOGLEAPI)
+
 
         return true
     }

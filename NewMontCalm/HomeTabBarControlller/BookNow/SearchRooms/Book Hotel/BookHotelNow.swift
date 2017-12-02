@@ -27,16 +27,19 @@ class BookHotelNow: UICollectionViewController{
     
     func setup(){
         // navigationController?.navigationBar.isHidden = true
+
         navigationItem.title = ""
         collectionView?.isPagingEnabled = true
 
         collectionView?.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
-        collectionView?.contentOffset = CGPoint(x: 0, y: -44)
+        self.automaticallyAdjustsScrollViewInsets = false
+
+
         //view.backgroundColor = Constants.Appearance.backgroundColor
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.shadowImage = UIImage()
-        collectionView?.backgroundColor = .white
         view.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
+        collectionView?.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
 
         collectionView?.register(BookHotelNowCell.self, forCellWithReuseIdentifier: "BookHotelNowCell")
 
@@ -111,9 +114,9 @@ class BookHotelNow: UICollectionViewController{
         return btn
     }()
     
-    let containerView: UIView = {
-        let containerView = UIView()
-        containerView.translatesAutoresizingMaskIntoConstraints = false
+    let containerView: CardView = {
+        let containerView = CardView()
+       // containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = .white
         return containerView
     }()

@@ -17,7 +17,8 @@ class SearchRooms: UITableViewController{
         super.viewDidLoad()
         setup()
         addViews()
-        apiCall()
+        navigationController?.navigationBar.isTranslucent = false
+       // apiCall()
         
 
     }

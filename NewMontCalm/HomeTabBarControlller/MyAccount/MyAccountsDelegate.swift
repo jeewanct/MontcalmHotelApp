@@ -35,12 +35,7 @@ extension MyAccountMainCell: UITableViewDelegate{
         case 0:
             print("0 Clicked")
         case 1:
-           // navigationItem.title = ""
-            let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .horizontal
-            layout.minimumLineSpacing = 0
-
-            parentInstance?.navigationController?.pushViewController(MyAccountActivityController(collectionViewLayout: layout) , animated: true)
+            parentInstance?.navigationController?.pushViewController(MyAccountActivityController() , animated: true)
 //            parent.pushViewController(MyAccountActivityController(collectionViewLayout: layout) , animated: true)
         case 2:
            // navigationItem.title = ""

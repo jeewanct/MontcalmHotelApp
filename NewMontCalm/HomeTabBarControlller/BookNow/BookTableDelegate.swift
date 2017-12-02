@@ -14,9 +14,9 @@ extension BookNow{
     
     // MARK: Table View Datasource
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.height * 2 // * 0.7 - 49
-    }
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return// UIScreen.main.bounds.height * 0.06 * 5 + UIScreen.main.bounds.height * 0.06 * 2.3 + UIScreen.main.bounds.height * 0.06 * 0.8 + Constants.StandardSize.TABLEROWHEIGHT  + 306// * 0.7 - 49
+//    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -68,6 +68,16 @@ extension BookCell: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         promoText.resignFirstResponder()
         return true
+    }
+
+    @objc func handlePrivacyStatments(){
+
+        if let window = UIApplication.shared.keyWindow{
+
+            let customPopUp = CustomPopUpViews()
+            window.addSubview(customPopUp)
+            customPopUp.anchorToTop(top: window.topAnchor, left: window.leftAnchor, bottom: window.bottomAnchor, right: window.rightAnchor)
+        }
     }
 }
 

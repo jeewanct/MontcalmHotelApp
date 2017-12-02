@@ -18,7 +18,7 @@ extension SearchRooms{
     
     // MARK: Table View Data Source delegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return hotelList?.list?.count ?? 0
+        return 10//hotelList?.list?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -29,7 +29,7 @@ extension SearchRooms{
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchRooms", for: indexPath) as! SearchRoomCell
         cell.selectionStyle = .none
         cell.searchRoomInstance = self
-        cell.hotelList = hotelList?.list?[indexPath.item]
+       // cell.hotelList = hotelList?.list?[indexPath.item]
         return cell
     }
 }

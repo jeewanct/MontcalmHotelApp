@@ -21,10 +21,9 @@ class HeaderView: UIView {
         addSubview(imageView)
         imageView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
         
-        let visualView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-        visualView.alpha = 0.3
-        addSubview(visualView)
-        visualView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        let blackView = BlackView()
+        addSubview(blackView)
+        blackView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
         //visualView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3).isActive = true
         
         

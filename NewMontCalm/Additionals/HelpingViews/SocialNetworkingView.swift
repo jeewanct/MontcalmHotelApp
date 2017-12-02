@@ -29,10 +29,11 @@ class SocialNetworkingView: UIView {
         addSubview(findthemontcalmLabel)
         findthemontcalmLabel.anchorToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor)
         findthemontcalmLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        findthemontcalmLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
         addSubview(socialNetworkingCollectionView)
 
 
-        socialNetworkingCollectionView.topAnchor.constraint(equalTo: findthemontcalmLabel.bottomAnchor, constant: 16).isActive = true
+        socialNetworkingCollectionView.topAnchor.constraint(equalTo: findthemontcalmLabel.bottomAnchor, constant: 8).isActive = true
         socialNetworkingCollectionView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         socialNetworkingCollectionView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         socialNetworkingCollectionView.widthAnchor.constraint(equalToConstant: 20 * 4 + 16 * 3 ).isActive = true

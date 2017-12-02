@@ -103,10 +103,26 @@ class SelectedHotelCell: UICollectionViewCell{
     
     func setup(){
         backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+
+        addSubview(backgroundImage)
+
+        backgroundImage.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+
+
+
+        let blackView = UIView()
+        blackView.translatesAutoresizingMaskIntoConstraints = false
+        blackView.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.6)
+
+        addSubview(blackView)
+
+        blackView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+
         addSubview(hotelNameText)
         hotelNameText.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
         hotelNameText.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
+
+
         
         
         // add buttons
@@ -125,7 +141,18 @@ class SelectedHotelCell: UICollectionViewCell{
         uberButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.15).isActive = true
         
     }
-    
+
+
+    let backgroundImage: UIImageView = {
+        let iv = UIImageView()
+        iv.clipsToBounds = true
+        iv.image = #imageLiteral(resourceName: "tempHotel")
+        iv.contentMode = .scaleAspectFill
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+
+
     let callButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.backgroundColor = #colorLiteral(red: 0.3254901961, green: 0.3254901961, blue: 0.3254901961, alpha: 1)
