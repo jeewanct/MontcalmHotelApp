@@ -10,12 +10,19 @@ import UIKit
 
 class Restaurants: UIView {
 
+    var hotelDetailType: ExploreSelectionEnum?
     var seeRoomInstance: SeeRoomInDetail?
-    
+    var restaurantData: [RestarurantHotelBars]?
+    var meetingEventsData: [MeetingEventsHotelDetails]?
+    var packageData: [PackagesDetails]?
+
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         addViews()
+
+
     }
 
     required init?(coder aDecoder: NSCoder) {

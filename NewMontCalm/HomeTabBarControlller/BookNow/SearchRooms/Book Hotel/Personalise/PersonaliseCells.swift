@@ -6,11 +6,14 @@
 //  Copyright © 2017 Jeevan chandra. All rights reserved.
 //
 
+
 import UIKit
 
 class PersonliseCell: UICollectionViewCell{
 
     var personaliseInstance: PersonaliseController?
+    var contentData = [false,false,false,false,false,false,false]
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,6 +24,24 @@ class PersonliseCell: UICollectionViewCell{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func handleSectionClick(cellClicked: Int){
+        
+        if contentData[cellClicked] == true{
+            
+            contentData[cellClicked] = false
+            contentTable.deleteRows(at: [IndexPath(row: 0, section: cellClicked)], with: .fade)
+            
+            
+            
+        }else{
+            
+            contentData[cellClicked] = true
+            contentTable.insertRows(at: [IndexPath(row: 0, section: cellClicked)], with: .fade)
+        }
+        
+    }
+    
     
     func addViews(){
         addSubview(contentTable)
@@ -37,7 +58,7 @@ class PersonliseCell: UICollectionViewCell{
         tv.backgroundColor = .clear
         tv.separatorStyle = .none
         tv.showsVerticalScrollIndicator = false
-        tv.register(PersonaliseTable.self, forCellReuseIdentifier: "PersonaliseTableCell")
+        tv.register(PersonaliseTableCell.self, forCellReuseIdentifier: "PersonaliseTableCell")
         return tv
     }()
     
@@ -45,7 +66,7 @@ class PersonliseCell: UICollectionViewCell{
     
 }
 
-class PersonaliseTable: UITableViewCell {
+class PersonaliseTableCell: UITableViewCell {
 
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -60,29 +81,34 @@ class PersonaliseTable: UITableViewCell {
     
     func addViews(){
         
-        addSubview(priceButton)
-        priceButton.anchorWithConstantsToTop(top: nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
-        priceButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.2).isActive = true
+        addSubview(selectHotelRoomsButton)
         
-        addSubview(backgroundImage)
-        backgroundImage.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: priceButton.topAnchor, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
+        selectHotelRoomsButton.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
+        selectHotelRoomsButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40) / 1.7).isActive = true
+        
+        addSubview(priceButton)
+        priceButton.anchorWithConstantsToTop(top: topAnchor, left: selectHotelRoomsButton.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 4, bottomConstant: 0, rightConstant: 16)
+    
+        
     }
     
-    let backgroundImage: UIImageView = {
-        let iv = UIImageView()
-        iv.clipsToBounds = true
-        iv.contentMode = .scaleAspectFill
-        iv.image = #imageLiteral(resourceName: "tempHotel")
-        return iv
+
+
+    let selectHotelRoomsButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.backgroundColor = .white
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.setTitle("Select Hotel Room(s)", for: .normal)
+        return btn
     }()
-    
     
     let priceButton: UIButton = {
         let btn = UIButton(type: .system)
+        btn.backgroundColor = .white
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.backgroundColor = Constants.Appearance.PRIMARYCOLOR
-        btn.setTitleColor(.white, for: .normal)
-        btn.setTitle("$20", for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.setTitle("Per Unit: $200", for: .normal)
         return btn
     }()
 }

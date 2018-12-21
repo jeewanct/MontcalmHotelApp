@@ -9,8 +9,13 @@
 import UIKit
 
 class LoginRegister: UITableViewController{
-    var headerView: LoginHeaderView!
 
+
+    var headerView: LoginHeaderView!
+    let loginCell = LoginRegisterCell()
+    var loginData: LoginModel?
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -23,6 +28,10 @@ class LoginRegister: UITableViewController{
         navigationController?.hidesBarsOnSwipe = false
         navigationController?.navigationBar.isHidden = true
         navigationItem.title = ""
+        tabBarController?.tabBar.isHidden = false
+        loginCell.signupButton.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
        // self.hidesBottomBarWhenPushed = true
     }
+
+    
 }

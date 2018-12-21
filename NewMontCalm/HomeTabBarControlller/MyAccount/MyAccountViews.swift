@@ -16,15 +16,15 @@ extension MyAccount{
 
 
 
-        view.addSubview(mainTableView)
-      //mainTableView.parentInstance = self
-
-        if #available(iOS 11.0, *){
-            mainTableView.anchorToTop(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
-        }else{
-            mainTableView.anchorToTop(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
-        }
-
+//        view.addSubview(mainTableView)
+//      //mainTableView.parentInstance = self
+//
+//        if #available(iOS 11.0, *){
+//            mainTableView.anchorToTop(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+//        }else{
+//            mainTableView.anchorToTop(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+//        }
+//
 
 
        

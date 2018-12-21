@@ -22,12 +22,7 @@ extension LoginRegisterCell{
 
     func addViews(){
 
-        let headerText = UILabel()
-        headerText.translatesAutoresizingMaskIntoConstraints = false
-        headerText.textColor = Constants.Appearance.PRIMARYCOLOR
-        headerText.text = "Log In To Your Account"
-        headerText.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 20)
-        headerText.textAlignment = .center
+        
         addSubview(headerText)
         headerText.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 16 , bottomConstant: 0, rightConstant: 16)
 
@@ -47,6 +42,11 @@ extension LoginRegisterCell{
         addSubview(loginButton)
         loginButton.anchorWithConstantsToTop(top: passwordText.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 24, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
         loginButton.heightAnchor.constraint(equalTo: headerText.heightAnchor).isActive = true
+
+        
+        loginButton.addSubview(activityIndicator)
+        activityIndicator.centerXAnchor.constraint(equalTo: loginButton.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: loginButton.centerYAnchor).isActive = true
 
 
         let orLabel = UILabel()
@@ -77,7 +77,8 @@ extension LoginRegisterCell{
 
         addSubview(signupButton)
         signupButton.anchorWithConstantsToTop(top: orLabel.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
-        signupButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1).isActive = true
+        signupButton.heightAnchor.constraint(equalTo: headerText.heightAnchor, multiplier: 1).isActive = true
+
 
 
     }

@@ -11,12 +11,30 @@ import UIKit
 class RoomsHeaderView: UITableViewHeaderFooterView{
     var cellIndex: Int?
     var bookHotelCellIndex: BookHotelNowCell?
-    
+
+    var roomImage: String?{
+
+        didSet{
+            if let imageUrl = roomImage, let imageUrlRequest = URL(string: imageUrl){
+                hotelImage.pin_updateWithProgress = true
+                hotelImage.pin_setImage(from: imageUrlRequest)
+            }
+        }
+
+
+
+    }
+    var roomName: String?{
+        didSet{
+            hotelNameText.text = roomName
+        }
+    }
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-       // backgroundColor = .clear
+         backgroundColor = .clear
         setup()
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -27,47 +45,35 @@ class RoomsHeaderView: UITableViewHeaderFooterView{
 
         let cardView = CardView()
         addSubview(cardView)
-        cardView.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
-
-
-        cardView.addSubview(backgroundImage)
-        backgroundImage.anchorToTop(top: cardView.topAnchor, left: cardView.leftAnchor, bottom: cardView.bottomAnchor, right: cardView.rightAnchor)
-
-        backgroundImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
-
-
-        let blackView = BlackView()
-        cardView.addSubview(blackView)
-        blackView.anchorToTop(top: cardView.topAnchor, left: cardView.leftAnchor, bottom: cardView.bottomAnchor, right: cardView.rightAnchor)
-
-
-      
-        cardView.addSubview(hotelNameText)
-        hotelNameText.anchorWithConstantsToTop(top: cardView.topAnchor, left: cardView.leftAnchor, bottom: nil, right: cardView.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
-
 
         cardView.addSubview(startFromLabel)
-        startFromLabel.anchorWithConstantsToTop(top: hotelNameText.bottomAnchor, left: cardView.leftAnchor, bottom: nil, right: nil, topConstant: 8, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
-        startFromLabel.widthAnchor.constraint(equalTo: cardView.widthAnchor, multiplier: 0.4).isActive = true
 
-        cardView.addSubview(lastroomsLabel)
-        lastroomsLabel.anchorWithConstantsToTop(top: hotelNameText.bottomAnchor, left: startFromLabel.rightAnchor, bottom: nil, right: nil, topConstant: 8, leftConstant: 8, bottomConstant: 16, rightConstant: 16)
-        lastroomsLabel.widthAnchor.constraint(equalTo: cardView.widthAnchor, multiplier: 0.4).isActive = true
+        cardView.addSubview(hotelNameText)
 
 
-        cardView.addSubview(uberButton)
-        uberButton.anchorWithConstantsToTop(top: nil, left: cardView.leftAnchor, bottom: cardView.bottomAnchor, right: nil, topConstant: 16, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
-        uberButton.widthAnchor.constraint(equalTo: cardView.widthAnchor, multiplier: 0.4).isActive = true
-        uberButton.heightAnchor.constraint(equalTo: cardView.heightAnchor, multiplier: 0.12).isActive = true
+        cardView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        cardView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        cardView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
+        cardView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.9).isActive = true
 
-        cardView.addSubview(callButton)
-        callButton.anchorWithConstantsToTop(top: nil, left: cardView.leftAnchor, bottom: uberButton.topAnchor, right: nil, topConstant: 16, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
-        callButton.widthAnchor.constraint(equalTo: cardView.widthAnchor, multiplier: 0.4).isActive = true
 
-        cardView.addSubview(whatsAppButton)
-        whatsAppButton.anchorWithConstantsToTop(top: nil, left: callButton.rightAnchor, bottom: uberButton.topAnchor, right: nil, topConstant: 16, leftConstant: 8, bottomConstant: 8, rightConstant: 16)
-        whatsAppButton.widthAnchor.constraint(equalTo: cardView.widthAnchor, multiplier: 0.4).isActive = true
 
+
+
+        hotelNameText.centerXAnchor.constraint(equalTo: cardView.centerXAnchor).isActive = true
+        hotelNameText.widthAnchor.constraint(equalTo: cardView.widthAnchor, multiplier: 0.9).isActive = true
+        hotelNameText.bottomAnchor.constraint(equalTo: startFromLabel.topAnchor, constant: 0).isActive = true
+        hotelNameText.heightAnchor.constraint(equalTo: cardView.heightAnchor, multiplier: 0.15).isActive = true
+
+
+        startFromLabel.centerXAnchor.constraint(equalTo: cardView.centerXAnchor).isActive = true
+        startFromLabel.widthAnchor.constraint(equalTo: cardView.widthAnchor, multiplier: 0.9).isActive = true
+        startFromLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 0).isActive = true
+        startFromLabel.heightAnchor.constraint(equalTo: cardView.heightAnchor, multiplier: 0.15).isActive = true
+
+        cardView.addSubview(hotelImage)
+        hotelImage.anchorToTop(top: cardView.topAnchor, left: cardView.leftAnchor, bottom: nil, right: cardView.rightAnchor)
+        hotelImage.heightAnchor.constraint(equalTo: cardView.heightAnchor, multiplier: 0.65).isActive = true
 
     }
     
@@ -99,68 +105,14 @@ class RoomsHeaderView: UITableViewHeaderFooterView{
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.text = "Starts from £2000"
-        lbl.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         lbl.font = UIFont.boldSystemFont(ofSize: 13)
         return lbl
     }()
 
-    let lastroomsLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.text = "Last 2 rooms left"
-        lbl.font = UIFont.boldSystemFont(ofSize: 13)
-        lbl.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        return lbl
-    }()
 
-    lazy var uberButton: UIButton = {
-        let btn = UIButton(type: .custom)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("Book an Uber", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
-        btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        /// btn.imageEdgeInsets = UIEdgeInsets(top: 4, left: 20, bottom: 4, right: 20)
-        // btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
-        //btn.backgroundColor = .white
-        btn.contentHorizontalAlignment = .left
-        btn.imageView?.contentMode = .scaleAspectFit
-        return btn
-
-    }()
-
-    lazy var callButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("020 5482 5267", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
-        btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        btn.contentHorizontalAlignment = .left
-        btn.imageView?.contentMode = .scaleAspectFit
-        return btn
-
-    }()
-
-
-    lazy var whatsAppButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("07258454834", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
-        btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        btn.contentHorizontalAlignment = .left
-        //     btn.imageView?.contentMode = .
-        return btn
-
-    }()
     
     
-    let backgroundImage: UIImageView = {
+    let hotelImage: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
@@ -172,14 +124,12 @@ class RoomsHeaderView: UITableViewHeaderFooterView{
 
     let hotelNameText: UILabel = {
         let lbl = UILabel()
-        lbl.text = "The Montcalm London Marble Arch"
+        lbl.text = "The Montcalm London  Arch ★★★★★"
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = UIFont.boldSystemFont(ofSize: 17)
         lbl.adjustsFontSizeToFitWidth = true
         lbl.minimumScaleFactor = 0.5
-        lbl.adjustsFontSizeToFitWidth = true
-        lbl.numberOfLines = 1
-        lbl.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        lbl.numberOfLines = 2
         return lbl
     }()
 }
@@ -189,13 +139,32 @@ import UIKit
 class RateTypeHeaderView: UIView{
     var cellIndex: Int?
     var rateTypeCellIndex: RateTypeCell?
+    var rateImage: String?{
 
+        didSet{
+            if let imageUrl = rateImage, let imageUrlRequest = URL(string: imageUrl){
+                hotelImage.pin_updateWithProgress = true
+                hotelImage.pin_setImage(from: imageUrlRequest)
+            }
+        }
+
+
+
+    }
+    var rateTypeName: String?{
+        didSet{
+            if let rateTitleString = rateTypeName{
+                rateTitle.attributedText = rateTitle.convertAttributeStringWithUnderLine(firstString: rateTitleString, secondString: " Tell Me More")
+            }
+
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
         addViews()
-        backgroundColor = .white
+        backgroundColor = .clear
     }
 
 
@@ -213,8 +182,14 @@ class RateTypeHeaderView: UIView{
         if index == rateTypeCellIndex?.cellIndex ?? -1 {
             rateTypeCellIndex?.cellIndex = -1
             DispatchQueue.main.async {
+
+                //self.rateTypeCellIndex?.contentTable.
                 self.rateTypeCellIndex?.contentTable.reloadData()
                 //self.bookHotelCellIndex?.contentTable.reloadRows(at: [IndexPath(item: 0, section: index),IndexPath(item: 1, section: index) ], with: .top )
+                
+
+
+
             }
         }else{
             rateTypeCellIndex?.cellIndex = index
@@ -233,32 +208,51 @@ class RateTypeHeaderView: UIView{
 
     func addViews(){
 
-
-        let knowMoreTitle = NSAttributedString(string: "Know More", attributes: [NSAttributedStringKey.underlineStyle: NSUnderlineStyle.styleSingle.rawValue, NSAttributedStringKey.foregroundColor: Constants.Appearance.PRIMARYCOLOR] )
-
-        knowMoreButton.setAttributedTitle(knowMoreTitle, for: .normal)
+        rateTitle.attributedText = rateTitle.convertAttributeStringWithUnderLine(firstString: "Limited Offer - Get 5% Off - ", secondString: "Tell Me More")
+        let cardView = CardView()
 
 
-        addSubview(rateTitle)
-        rateTitle.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: 0)
-        rateTitle.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
+        addSubview(cardView)
+        cardView.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
 
-
-        addSubview(knowMoreButton)
-        knowMoreButton.anchorWithConstantsToTop(top: topAnchor, left: rateTitle.rightAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 0)
+        cardView.addSubview(rateTitle)
+        rateTitle.anchorWithConstantsToTop(top: cardView.topAnchor, left: cardView.leftAnchor, bottom: nil, right: cardView.rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: UIScreen.main.bounds.height * 0.07 * 2 * 0.3 + 8)
+        rateTitle.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.065).isActive = true
 
 
         let nextImage = UIImageView()
-        nextImage.translatesAutoresizingMaskIntoConstraints = false
         nextImage.image = #imageLiteral(resourceName: "next").withRenderingMode(.alwaysOriginal)
+        nextImage.translatesAutoresizingMaskIntoConstraints = false
+
+        cardView.addSubview(nextImage)
+        nextImage.centerYAnchor.constraint(equalTo: rateTitle.centerYAnchor).isActive = true
+        nextImage.rightAnchor.constraint(equalTo: cardView.rightAnchor, constant: -16).isActive = true
+        nextImage.heightAnchor.constraint(equalTo: rateTitle.heightAnchor, multiplier: 0.3).isActive = true
+        nextImage.widthAnchor.constraint(equalTo: rateTitle.heightAnchor, multiplier: 0.3).isActive = true
 
 
 
-        addSubview(nextImage)
-        nextImage.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        nextImage.rightAnchor.constraint(equalTo: rightAnchor, constant: -16).isActive = true
-        nextImage.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3).isActive = true
-        nextImage.widthAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3).isActive = true
+        cardView.addSubview(startFromLabel)
+        startFromLabel.anchorWithConstantsToTop(top: rateTitle.bottomAnchor, left: cardView.leftAnchor, bottom: nil, right: cardView.rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
+
+        startFromLabel.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.065).isActive = true
+
+        cardView.addSubview(hotelImage)
+        hotelImage.anchorToTop(top: rateTitle.bottomAnchor, left: cardView.leftAnchor, bottom: cardView.bottomAnchor, right: cardView.rightAnchor)
+
+        let blackView = BlackView()
+        hotelImage.addSubview(blackView)
+        blackView.anchorToTop(top: hotelImage.topAnchor, left: hotelImage.leftAnchor, bottom: hotelImage.bottomAnchor, right: hotelImage.rightAnchor)
+
+
+
+        //        let nextImage = UIImageView()
+        //        nextImage.translatesAutoresizingMaskIntoConstraints = false
+        //        nextImage.image = #imageLiteral(resourceName: "next").withRenderingMode(.alwaysOriginal)
+        //
+        //
+        //
+
 
 
     }
@@ -266,7 +260,8 @@ class RateTypeHeaderView: UIView{
     let rateTitle: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.text = "Rooms With A Square View -"
+        lbl.text = "Limited Offer - Get 5% Off - Tell Me More"
+        lbl.font = UIFont.boldSystemFont(ofSize: 14)
         lbl.adjustsFontSizeToFitWidth = true
         lbl.minimumScaleFactor = 0.1
         return lbl
@@ -277,6 +272,24 @@ class RateTypeHeaderView: UIView{
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.contentHorizontalAlignment = .left
         return btn
+    }()
+
+    let startFromLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.text = "Starts from £2000"
+        lbl.textColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
+        lbl.font = UIFont.boldSystemFont(ofSize: 13)
+        return lbl
+    }()
+
+    let hotelImage: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
+        iv.image = #imageLiteral(resourceName: "tempHotel")
+        return iv
     }()
 
 

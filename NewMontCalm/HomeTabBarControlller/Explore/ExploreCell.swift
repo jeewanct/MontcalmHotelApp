@@ -34,10 +34,9 @@ class ExploreCell: UITableViewCell{
         exploreImage.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         
         
-        let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-        effectView.alpha = 0.5
-        exploreImage.addSubview(effectView)
-        effectView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        let blackView = BlackView()
+        addSubview(blackView)
+        blackView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
         
         addSubview(imageHeading)
         imageHeading.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true

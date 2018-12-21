@@ -11,15 +11,29 @@ import UIKit
 class SearchRoomCell: UITableViewCell{
     
     var searchRoomInstance: SearchRooms?
-    var hotelList: RoomList? {
+    var hotelDetail: ListOfAvailableHotels? {
+      
         didSet{
-            hotelNameText.text = hotelList?.hotelName
-
-            guard let imagePath = hotelList?.hotelImage else {
+            locationButton.setTitle(hotelDetail?.hotelAddress, for: .normal)
+            callButton.setTitle(hotelDetail?.hotelTelNo, for: .normal)
+            whatsAppButton.setTitle(hotelDetail?.hotelWhatsAppNo, for: .normal)
+            if let startingPrice = hotelDetail?.startingPrice{
+                startFromLabel.text = "Starts from \(startingPrice)"
+            }
+            guard let hotelName = hotelDetail?.hotelName else {
                 return
             }
-            
-            backgroundImage.downloadImage(imagePath: imagePath)
+            if let rating = hotelDetail?.hotelRating{
+                var ratingString = String()
+                ratingString.append(" ")
+                if let starRating = Double(rating) {
+                    for _ in 1...Int(starRating){
+                        ratingString.append("★")
+                    }
+                    hotelNameText.attributedText = hotelNameText.convertAttributeString(firstString: hotelName, secondString: ratingString, firstColor: #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), secondColor: #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1))
+
+                }
+            }
         }
     }
 
@@ -38,7 +52,11 @@ class SearchRoomCell: UITableViewCell{
     
     
     @objc func searchRooms(){
-        searchRoomInstance?.bookNow()
+
+        if let hotelId = hotelDetail?.hotelId{
+            searchRoomInstance?.bookNow(hotelId: hotelId)
+        }
+
     }
 
     @objc func handleCall(){
@@ -54,155 +72,100 @@ class SearchRoomCell: UITableViewCell{
     }
 
     // MARK: UI Elements
-    
-    let backgroundImage: UIImageView = {
-        let iv = UIImageView()
-        iv.clipsToBounds = true
-        iv.image = #imageLiteral(resourceName: "tempHotel")
-        iv.contentMode = .scaleAspectFill
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
-    }()
 
-    lazy var uberButton: UIButton = {
-        let btn = UIButton(type: .custom)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("Book an Uber", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
-        btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        /// btn.imageEdgeInsets = UIEdgeInsets(top: 4, left: 20, bottom: 4, right: 20)
-        // btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
-        //btn.backgroundColor = .white
-        btn.contentHorizontalAlignment = .left
+    lazy var locationButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("123 Road, London, Ab1 CD 2", for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.titleLabel?.numberOfLines = 2
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         btn.addTarget(self, action: #selector(searchRooms), for: .touchUpInside)
-        btn.imageView?.contentMode = .scaleAspectFit
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.contentHorizontalAlignment = .left
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
         return btn
-
     }()
 
+    lazy var milesButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("10 Miles", for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.contentHorizontalAlignment = .left
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.numberOfLines = 1
+        return btn
+    }()
+    
+    lazy var bookHotelButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
+        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
+        btn.setTitle("Book Now", for: .normal)
+        btn.addTarget(self, action: #selector(searchRooms), for: .touchUpInside)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
+    
     lazy var callButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("020 5482 5267", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
         btn.contentHorizontalAlignment = .left
         btn.imageView?.contentMode = .scaleAspectFit
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.numberOfLines = 1
         return btn
-
+        
     }()
-
-
+    
+    
     lazy var whatsAppButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("07258454834", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
         btn.contentHorizontalAlignment = .left
-        //     btn.imageView?.contentMode = .
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.numberOfLines = 1
         return btn
-
+        
     }()
     
-//    lazy var callButton: UIButton = {
-//        let btn = UIButton(type: .system)
-//        btn.backgroundColor = #colorLiteral(red: 0.3254901961, green: 0.3254901961, blue: 0.3254901961, alpha: 1)
-//        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-//        btn.setTitle("CALL", for: .normal)
-//       // btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
-//        btn.addTarget(self, action: #selector(handleCall), for: .touchUpInside)
-//        btn.translatesAutoresizingMaskIntoConstraints = false
-//        return btn
-//    }()
-//
-//    let uberButton: UIButton = {
-//        let btn = UIButton(type: .system)
-//        btn.backgroundColor = #colorLiteral(red: 0.3254901961, green: 0.3254901961, blue: 0.3254901961, alpha: 1)
-//        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-//        btn.setTitle("UBER", for: .normal)
-//       // btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
-//        btn.translatesAutoresizingMaskIntoConstraints = false
-//        return btn
-//    }()
-//
-//    lazy var bookNowButton: UIButton = {
-//        let btn = UIButton(type: .system)
-//        btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-//        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-//        btn.setTitle("BOOK NOW", for: .normal)
-//       // btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
-//        btn.titleLabel?.numberOfLines = 1
-//        btn.titleLabel?.adjustsFontSizeToFitWidth = true
-//        btn.addTarget(self, action: #selector(searchRooms), for: .touchUpInside)
-//        btn.translatesAutoresizingMaskIntoConstraints = false
-//        return btn
-//    }()
-
-    let hotelNameText: UILabel = {
-        let lbl = UILabel()
-        lbl.text = "The Montcalm London Marble Arch"
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.font = UIFont.boldSystemFont(ofSize: 17)
-        lbl.adjustsFontSizeToFitWidth = true
-        lbl.minimumScaleFactor = 0.5
-        lbl.adjustsFontSizeToFitWidth = true
-        lbl.numberOfLines = 1
-        lbl.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        return lbl
-    }()
-
-    lazy var distanceButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("10 Miles Away", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
-        btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        btn.contentHorizontalAlignment = .left
-        btn.imageView?.contentMode = .scaleAspectFit
-        return btn
-
-    }()
-
-
-    lazy var locationButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("40 London Road London", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
-        btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        btn.contentHorizontalAlignment = .left
-        //     btn.imageView?.contentMode = .
-        return btn
-
-    }()
-
-
     let startFromLabel: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.text = "Starts from £2000"
-        lbl.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        lbl.textColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
         lbl.font = UIFont.boldSystemFont(ofSize: 13)
         return lbl
     }()
-
-    let starRatingLabel: UILabel = {
+    
+    let hotelNameText: UILabel = {
         let lbl = UILabel()
+        lbl.text = "The Montcalm London Marble Arch"
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.text = "Star Rating ★★★★★"
-        lbl.font = UIFont.boldSystemFont(ofSize: 13)
-        lbl.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        lbl.font = UIFont.boldSystemFont(ofSize: 15)
+        lbl.numberOfLines = 0
+        lbl.textColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
+        return lbl
+    }()
+    
+    let starLabel : UILabel = {
+        let lbl = UILabel()
+        lbl.text = "★★★★★"
+        lbl.font = UIFont.boldSystemFont(ofSize: 14)
+        lbl.minimumScaleFactor = 0.5
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.numberOfLines = 1
         return lbl
     }()
     

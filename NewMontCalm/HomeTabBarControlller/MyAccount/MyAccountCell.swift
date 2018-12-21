@@ -9,10 +9,12 @@
 import UIKit
 
 class MyAccountCell: UITableViewCell{
-    
+
+    var parentInstance: MyAccount?
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        selectionStyle = .none
         addViews()
     }
     

@@ -10,6 +10,19 @@ import UIKit
 
 class FloatingOffersCell: UITableViewCell {
 
+
+    var offersDetails: OffersTabBarHotelOffers?{
+        didSet{
+            offerLabel.text = offersDetails?.offerName
+            offerDescLabel.text = offersDetails?.shortDesc
+
+            if let imageUrl = offersDetails?.offerImageUrl, let imageUrlRequest = URL(string: imageUrl){
+                backgroundImage.pin_updateWithProgress = true
+                backgroundImage.pin_setImage(from: imageUrlRequest)
+            }
+
+        }
+    }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
@@ -24,9 +37,16 @@ class FloatingOffersCell: UITableViewCell {
 
     func addViews(){
 
-        addSubview(backgroundImage)
-        backgroundImage.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
-        backgroundImage.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.75).isActive = true
+
+        let cardView = CardView()
+        addSubview(cardView)
+        cardView.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
+        cardView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.75).isActive = true
+
+
+
+        cardView.addSubview(backgroundImage)
+        backgroundImage.anchorWithConstantsToTop(top: cardView.topAnchor, left: cardView.leftAnchor, bottom: cardView.bottomAnchor, right: cardView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
 
         let blackView  = BlackView()
         backgroundImage.addSubview(blackView)
@@ -49,14 +69,30 @@ class FloatingOffersCell: UITableViewCell {
     }
 
 
+    @objc func handleKnowMore(){
+        if let window = UIApplication.shared.keyWindow{
+
+            guard let knowMoreDetail = offersDetails?.longDesc else{
+                return
+            }
+
+            let obj = CustomPopUpViews()
+            obj.webView.loadHTMLString(knowMoreDetail, baseURL: nil)
+            window.addSubview(obj)
+            obj.anchorToTop(top: window.topAnchor, left: window.leftAnchor, bottom: window.bottomAnchor, right: window.rightAnchor)
+
+        }
+
+    }
+
     let offerLabel: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.textColor = .white
-        //        lbl.adjustsFontSizeToFitWidth = true
-        //        lbl.minimumScaleFactor = 0.1
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.minimumScaleFactor = 0.1
         lbl.text = "Offer 1"
-        lbl.font = UIFont.boldSystemFont(ofSize: 17)
+        lbl.font = UIFont.boldSystemFont(ofSize: 15)
         return lbl
     }()
 
@@ -64,11 +100,11 @@ class FloatingOffersCell: UITableViewCell {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.textColor = .white
-        lbl.numberOfLines = 0
+        lbl.numberOfLines = 3
         //        lbl.adjustsFontSizeToFitWidth = true
         //        lbl.minimumScaleFactor = 0.1
         lbl.text = "The Montcalm London Marble Arch is the process for converting"
-        lbl.font = UIFont.boldSystemFont(ofSize: 14)
+        lbl.font = UIFont.boldSystemFont(ofSize: 13)
         return lbl
     }()
 
@@ -98,7 +134,7 @@ class FloatingOffersCell: UITableViewCell {
         btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
         btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
         btn.setTitle("KNOW MORE", for: .normal)
-       // btn.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(handleKnowMore), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()

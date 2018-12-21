@@ -10,24 +10,14 @@ import UIKit
 
 extension BookNow{
     
-    
-    
-    // MARK: Table View Datasource
-    
-//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return// UIScreen.main.bounds.height * 0.06 * 5 + UIScreen.main.bounds.height * 0.06 * 2.3 + UIScreen.main.bounds.height * 0.06 * 0.8 + Constants.StandardSize.TABLEROWHEIGHT  + 306// * 0.7 - 49
-//    }
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BookCell", for: indexPath) as! BookCell
-        cell.selectionStyle = .none
-        cell.bookNowInstance = self
-        return cell
+        return homeCell
     }
+    
 }
 
 
@@ -52,14 +42,18 @@ extension BookNow {
         self.present(CalendarController(), animated: true, completion: nil)
     }
 
-    func handleSearchRooms(){
-        let obj = UINavigationController(rootViewController: SearchRooms())
-        self.present(obj, animated: true, completion: nil)
+    @objc func handleSearchRooms(){
+        let obj = SearchRooms()
+        obj.dates = dates
+        navigationController?.pushViewController(obj, animated: true)
+
     }
 
+    
     func handleLoginRegister(){
         navigationController?.pushViewController(LoginRegister(), animated: true)
     }
+    
     
 }
 
@@ -88,18 +82,29 @@ extension BookCell: UITextFieldDelegate{
 extension BookCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: ourPropertiesCollectionView.frame.width, height: ourPropertiesCollectionView.frame.height)
+        
+        let size = CGSize(width: UIScreen.main.bounds.width - 64 , height: 1000.0)
+        
+        if let getHotelName = hotelList?[indexPath.section].hotelName{
+            
+            let estimatedFrame = NSString(string: getHotelName).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 15) ], context: nil)
+            return CGSize(width: UIScreen.main.bounds.width - 32 , height: estimatedFrame.height * 2 + 72 + estimatedFrame.height * 0.5 * 2 + Constants.StandardSize.TABLEROWHEIGHT  )
+        }
+        
+        return CGSize(width: UIScreen.main.bounds.width - 32, height: Constants.StandardSize.TABLEROWHEIGHT)
+        
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return hotelList?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OurPropertiesCell", for: indexPath) as! OurPropertiesCell
-        cell.backgroundImageView.image = [#imageLiteral(resourceName: "image0"),#imageLiteral(resourceName: "Image1"),#imageLiteral(resourceName: "Image2"),#imageLiteral(resourceName: "Image3"),#imageLiteral(resourceName: "Image4"),#imageLiteral(resourceName: "image0"),#imageLiteral(resourceName: "Image1"),#imageLiteral(resourceName: "Image2"),#imageLiteral(resourceName: "Image3"),#imageLiteral(resourceName: "Image4")][indexPath.item]
+        cell.hotelDetail = hotelList?[indexPath.item]
         return cell
     }
+    
 
 
 }

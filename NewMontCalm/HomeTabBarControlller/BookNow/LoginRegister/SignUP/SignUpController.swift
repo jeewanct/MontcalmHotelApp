@@ -8,27 +8,69 @@
 
 import UIKit
 
+enum ProfileValue{
+    case EDITPROFILE
+    case REGISTER
+}
+
+
+
+
 class SignUpController: UITableViewController {
 
+    var screenType: ProfileValue?{
+        didSet{
+            if screenType == ProfileValue.EDITPROFILE{
+
+                title = "Edit Profile"
+               // contactInfoCell.passwordHeightAnchor?.constant = 0
+                contactInfoCell.confirmPassHeightAnchor?.constant = 0
+                prefillUserDetails()
+
+            }else{
+                title = "Sign Up"
+            }
+        }
+
+    }
+    var countryList: [GetCountry]?
+    var userData: RegisterSuccessfulModel?
+
+    var serverData = [
+        "title" : "",
+        "firstName" : "",
+        "lastName" : "",
+        "dateOfBirth" : "",
+        "gender" : "",
+        "addressType" : "",
+        "address1" : "",
+        "address2" : "",
+        "city" : "",
+        "state" : "",
+        "country" : "",
+        "zipCode" : "",
+        "phoneType" : "",
+        "phoneNumber" : "",
+        "faxNumber" : "",
+        "email" : "",
+        "password" : ""
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         addViews()
+        
     }
 
     func setup(){
 
-
-        tableView.register(PersonalDetailsCell.self, forCellReuseIdentifier: "PersonalDetailsCell")
-        tableView.register(AddressDetails.self, forCellReuseIdentifier: "AddressDetails")
-        tableView.register(ContactInformationCell.self, forCellReuseIdentifier: "ContactInformationCell")
-        tableView.register(AdditionalInformationCell.self, forCellReuseIdentifier: "AdditionalInformationCell")
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
         tableView.delegate = self
         tableView.dataSource = self
-
+        tableView.rowHeight = UITableViewAutomaticDimension
 
         view.backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
 
@@ -37,33 +79,19 @@ class SignUpController: UITableViewController {
         }
 
 
+        self.performSelector(inBackground: #selector(callCountryApi), with: nil)
 
-        title = "Sign up"
+       // title = "Sign up"
         let closeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "close").withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(handleClose))
         closeButton.tintColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
         navigationItem.rightBarButtonItem = closeButton
     }
 
-    @objc func handleClose(){
-        self.dismiss(animated: true, completion: nil)
-    }
-
-
-//    lazy var userInformationTableView: UITableView = {
-//        let tv = UITableView()
-//        tv.delegate = self
-//        tv.dataSource = self
-//        tv.register(PersonalDetailsCell.self, forCellReuseIdentifier: "PersonalDetailsCell")
-//        tv.register(AddressDetails.self, forCellReuseIdentifier: "AddressDetails")
-//        tv.register(ContactInformationCell.self, forCellReuseIdentifier: "ContactInformationCell")
-//        tv.register(AdditionalInformationCell.self, forCellReuseIdentifier: "AdditionalInformationCell")
-//        tv.showsVerticalScrollIndicator = false
-//        tv.separatorStyle = .none
-//        tv.backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
-//        tv.translatesAutoresizingMaskIntoConstraints = false
-//        return tv
-//    }()
-
+    
+    let personalInfoCell = PersonalDetailsCell()
+    let addressInfoCell = AddressDetails()
+    let contactInfoCell = ContactInformationCell()
+    let recommendedByCell = AdditionalInformationCell()
 
 
 

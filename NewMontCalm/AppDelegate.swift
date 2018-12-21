@@ -4,9 +4,6 @@
 //
 //  Created by Jeevan chandra on 01/08/17.
 //  Copyright © 2017 Jeevan chandra. All rights reserved.
-// button.titleLabel.numberOfLines = 1;
-// button.titleLabel.adjustsFontSizeToFitWidth = YES;
-// button.titleLabel.lineBreakMode = NSLineBreakByClipping;
 
 import UIKit
 import GoogleMaps

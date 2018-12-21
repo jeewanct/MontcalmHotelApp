@@ -8,24 +8,103 @@
 
 import UIKit
 
-class BookNow: UITableViewController{
+
+protocol getCheckInOutDate {
+    func getCheckInCheckOutDate(checkInDate: Date, checkOutDate: Date)
+}
+
+
+
+class BookNow: UITableViewController, OpenCalendar, getCheckInOutDate{
+    func openCalendar(value: Int) {
+    
+        let obj = CalendarController()
+        obj.delegate = self
+        present(UINavigationController(rootViewController: obj), animated: true, completion: nil)
+    }
+    
+    
+    var homeCell = BookCell()
+    
+  
     
     // MARK: View life cycle
     var headerView: HeaderView!
+    var currencyList: [GetCurrency]?
+    var homeData: HomeContactModel?
+    var dates = [
+        "checkIn": Date(),
+        "checkOut": LogicHelper.shared.addOneToDate(date: Date())
+    ]
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
         setup()
+        callApis()
+
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.tabBar.isHidden = false
         navigationController?.navigationBar.isHidden = true
         navigationController?.hidesBarsOnSwipe = false
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 
+    }
+
+    func callApis(){
+        performSelector(inBackground: #selector(handleGetCurrency), with: nil)
+        performSelector(inBackground: #selector(handleGetHomeData), with: nil)
+    }
+    
+    func getCheckInCheckOutDate(checkInDate: Date, checkOutDate: Date){
+        
+        homeCell.dateView.checkIn = checkInDate
+        homeCell.dateView.checkOut = checkOutDate
+        
+        dates.updateValue(checkInDate, forKey: "checkIn")
+        dates.updateValue(checkOutDate, forKey: "checkOut")
+        
+    }
+    
+    
+    @objc func handleGetHomeData(){
+        
+        let obj = ViewControllersHTTPRequest()
+        obj.getHomeContactDetails(completion: { (data) in
+            self.homeData = data
+            self.homeCell.hotelList = self.homeData?.hotelList
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }) { (error) in
+            
+        }
+        
+        
+    }
+
+    @objc func handleGetCurrency(){
+
+
+        let obj = ViewControllersHTTPRequest()
+
+
+        obj.getCurrencyList(completion: { (currencyList) in
+
+            self.currencyList = currencyList
+            self.homeCell.currencyList = self.currencyList
+
+        }) { (error) in
+
+            
+        }
+        
     }
 
     
@@ -37,10 +116,15 @@ class BookNow: UITableViewController{
         tableView.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableViewAutomaticDimension
-       // tableView.estimatedRowHeight = 2000
-        tableView.register(BookCell.self, forCellReuseIdentifier: "BookCell")
         tableView.showsVerticalScrollIndicator = false
         navigationItem.title = ""
+        homeCell.dateView.delegate = self
+        homeCell.searchRoomsButton.addTarget(self, action: #selector(handleSearchRooms), for: .touchUpInside)
+        homeCell.searchRoomsButton.addTarget(self, action: #selector(handleSearchRooms), for: .touchUpInside)
+        
+        homeCell.dateView.checkIn = Date()
+        homeCell.dateView.checkOut = LogicHelper.shared.addOneToDate(date: Date())
+        
 
     }
     

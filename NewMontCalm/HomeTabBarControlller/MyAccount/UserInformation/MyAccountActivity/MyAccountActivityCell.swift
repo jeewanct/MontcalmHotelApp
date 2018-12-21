@@ -55,6 +55,13 @@ class MyAccountActivityCell: UITableViewCell{
         return btn
     }()
 
+    let hotelName: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.text = "Montcalm Marble ARch"
+        lbl.textAlignment = .center
+        return lbl
+    }()
 
 }
 

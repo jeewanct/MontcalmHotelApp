@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NewMontCalm.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>armv7</string>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>8DAA041F5B0B3271982C922D1F9F63C1474065C8</string>
+				<key>dateExpires</key>
+				<string>19/06/18</string>
+				<key>type</key>
+				<string>iOS Development</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>armv7</string>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>8DAA041F5B0B3271982C922D1F9F63C1474065C8</string>
+						<key>dateExpires</key>
+						<string>19/06/18</string>
+						<key>type</key>
+						<string>iOS Development</string>
+					</dict>
+					<key>name</key>
+					<string>JTAppleCalendar.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>HHNMG7TU8U</string>
+						<key>name</key>
+						<string>Neoteric UK Ltd</string>
+					</dict>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>2RSZ3ZB5KM.Acknown.NewMontCalm</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>HHNMG7TU8U</string>
+				<key>get-task-allow</key>
+				<true/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>2RSZ3ZB5KM.Acknown.NewMontCalm</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>NewMontCalm.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>f2cf810c-e50b-466f-940d-2c4cc3c3fb60</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: *</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>HHNMG7TU8U</string>
+				<key>name</key>
+				<string>Neoteric UK Ltd</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

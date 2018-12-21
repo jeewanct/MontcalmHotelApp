@@ -10,6 +10,9 @@ import UIKit
 
 class EnhancmentHeaderView: UIView {
 
+    var headerNumber: Int?
+    var parentInstance: PersonliseCell?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
@@ -37,8 +40,8 @@ class EnhancmentHeaderView: UIView {
 //        cardView.addSubview(enhancmentTitle)
 //        enhancmentTitle.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: headerImage.topAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
 
-        let titleContainer = BlackView()
-        titleContainer.backgroundColor = .white
+        
+    
         cardView.addSubview(titleContainer)
         titleContainer.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: headerImage.topAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
 
@@ -62,6 +65,15 @@ class EnhancmentHeaderView: UIView {
         detailsTitle.anchorWithConstantsToTop(top: nil, left: headerImage.leftAnchor, bottom: headerImage.bottomAnchor, right: headerImage.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 8, rightConstant: 8)
 
     }
+    
+    
+    @objc func handleTapGes(){
+        if let cellClicked = headerNumber {
+            parentInstance?.handleSectionClick(cellClicked: cellClicked)
+        }
+    }
+    
+    
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -103,5 +115,13 @@ class EnhancmentHeaderView: UIView {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFill
         return iv
+    }()
+    
+    lazy var titleContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGes)))
+        return view
     }()
 }

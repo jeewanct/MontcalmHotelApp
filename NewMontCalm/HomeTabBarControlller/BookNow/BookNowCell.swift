@@ -11,12 +11,46 @@ import UIKit
 class BookCell: UITableViewCell{
     
     var moveCollectinView = 0
+    let dateView = CheckInCheckOutView()
+    var currencySearchResult: [GetCurrency]?
+    var currencyList: [GetCurrency]?{
+        didSet{
+            currencySearchResult = currencyList
+        }
+    }
+    
+    let currencyView = CurrencyView()
+
+    var hotelSearchResult: [ListOfAvailableHotels]?
+
+    var hotelList: [ListOfAvailableHotels]?{
+        didSet{
+            DispatchQueue.main.async {
+                     self.changeCollectinViewHeight()
+                     self.ourPropertiesCollectionView.reloadData()
+            }
+            
+            hotelSearchResult = hotelList
+        }
+    }
+    
+    var buttonValue = 0
+    var collectionHeightAnchor: NSLayoutConstraint?
+    
+    var homeData: HomeContactModel?{
+        didSet{
+            hotelList = homeData?.hotelList
+            changeCollectinViewHeight()
+        }
+    }
+    
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addViews()
         setup()
-    //    animateHotelCollection()
         backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
+        selectionStyle = .none
     }
 
     func animateHotelCollection(){
@@ -27,6 +61,22 @@ class BookCell: UITableViewCell{
              self.moveCollectinView = self.moveCollectinView < 9 ? self.moveCollectinView + 1 : 0
         }) { (value) in
             self.animateHotelCollection()
+        }
+    }
+    
+    func changeCollectinViewHeight(){
+        
+        if let hotelListCount = hotelList?.count{
+            if hotelListCount > 0 {
+                if let getString = hotelList?[0].hotelName{
+                   
+                    let size = CGSize(width: UIScreen.main.bounds.width - 64 , height: 1000.0)
+                        
+                        let estimatedFrame = NSString(string: getString).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 15) ], context: nil)
+                       collectionHeightAnchor?.constant =  estimatedFrame.height * 2 + 72 + estimatedFrame.height * 0.5 * 2 + Constants.StandardSize.TABLEROWHEIGHT
+                    
+                }
+            }
         }
     }
 
@@ -53,35 +103,50 @@ class BookCell: UITableViewCell{
 
     @objc func handleCheckInOut(){
         bookNowInstance?.goToCalendar()
+        
     }
+
+    @objc func handleCurrency(){
+
+        if let window = UIApplication.shared.keyWindow{
+            buttonValue = 1
+            window.addSubview(currencyView)
+            currencyView.contentTable.delegate = self
+            currencyView.contentTable.dataSource = self
+            currencyView.searchBar.delegate = self
+          //  currencyView.currencyList = currencyList
+            currencyView.anchorToTop(top: window.topAnchor, left: window.leftAnchor, bottom: window.bottomAnchor, right: window.rightAnchor)
+        }
+    }
+    
+    @objc func handleHotels(){
+        
+        if let window = UIApplication.shared.keyWindow{
+            buttonValue = 0
+            let currencyView = CurrencyView()
+            currencyView.contentTable.delegate = self
+            currencyView.contentTable.dataSource = self
+            currencyView.searchBar.delegate = self
+            window.addSubview(currencyView)
+         //   currencyView.currencyList = currencyList
+            currencyView.anchorToTop(top: window.topAnchor, left: window.leftAnchor, bottom: window.bottomAnchor, right: window.rightAnchor)
+        }
+    }
+
     // MARK: UI Elements
-    let allHotelsButton: UIButton = {
+    lazy var allHotelsButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         btn.contentHorizontalAlignment = .left
         btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
         btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
-        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
+        btn.titleLabel?.font  = UIFont.boldSystemFont(ofSize: 15)
         btn.setTitle("All Montcalm Hotels", for: .normal)
+        btn.addTarget(self, action: #selector(handleHotels), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
-    lazy var checkInButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.addTarget(self, action: #selector(handleCheckInOut), for: .touchUpInside)
-        return btn
-    }()
-
-
-    lazy var checkOutButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.addTarget(self, action: #selector(handleCheckInOut), for: .touchUpInside)
-        return btn
-    }()
+   
     
     let promoText: UITextField = {
         let txt = UITextField()
@@ -98,7 +163,7 @@ class BookCell: UITableViewCell{
         let btn = UIButton(type: .system)
         btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
         btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         btn.setTitle("SEARCH ROOMS", for: .normal)
         btn.addTarget(self, action: #selector(searchRooms), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -110,73 +175,13 @@ class BookCell: UITableViewCell{
         let btn = UIButton(type: .system)
         btn.backgroundColor = .white
         btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
-        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
+        btn.titleLabel?.font  = UIFont.boldSystemFont(ofSize: 15)
         btn.setTitle("Select Currency", for: .normal)
         btn.contentHorizontalAlignment = .left
         btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
-       // btn.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(handleCurrency), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
-    }()
-
-    let checkInDate: UILabel = {
-        let lbl = UILabel()
-        lbl.numberOfLines = 0
-        lbl.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 20)
-        lbl.text = "MON\nSep '17"
-        lbl.adjustsFontSizeToFitWidth = true
-        lbl.minimumScaleFactor = 0.1
-        lbl.sizeToFit()
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        return lbl
-    }()
-    let checkInYearLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.numberOfLines = 0
-        lbl.textColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        lbl.text = "22"
-        lbl.adjustsFontSizeToFitWidth = true
-        lbl.minimumScaleFactor = 0.32
-        lbl.sizeToFit()
-        lbl.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 120)
-        return lbl
-    }()
-    
-    let checkOutYearLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.numberOfLines = 0
-        lbl.textColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        lbl.text = "22"
-        lbl.adjustsFontSizeToFitWidth = true
-        lbl.minimumScaleFactor = 0.32
-        lbl.sizeToFit()
-        lbl.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 120)
-        return lbl
-    }()
-    
-    let checkOutDate: UILabel = {
-        let lbl = UILabel()
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.numberOfLines = 0
-        lbl.text = "MON\nSep '17"
-        lbl.adjustsFontSizeToFitWidth = true
-        lbl.minimumScaleFactor = 0.1
-        lbl.sizeToFit()
-        lbl.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 20)
-        return lbl
-    }()
-    
-    let checkInDay : UILabel = {
-        let lbl = UILabel()
-        lbl.contentMode = .scaleAspectFill
-        lbl.clipsToBounds = true
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.textColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        lbl.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 60)
-        lbl.text = "22"
-        return lbl
     }()
 
 
@@ -186,7 +191,7 @@ class BookCell: UITableViewCell{
         let btn = UIButton(type: .system)
         btn.backgroundColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
         btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
+        btn.titleLabel?.font  = UIFont.boldSystemFont(ofSize: 15)
         btn.setTitle("WHY BOOK HERE", for: .normal)
         btn.addTarget(self, action: #selector(handlePrivacyStatments), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -194,41 +199,50 @@ class BookCell: UITableViewCell{
     }()
 
     lazy var ourPropertiesCollectionView: UICollectionView = {
+        
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.delegate = self
         cv.isPagingEnabled = true
-        cv.dataSource = self
         cv.tag = 0
+        cv.delegate = self
+        cv.dataSource = self
+        cv.backgroundColor = .clear
         cv.showsHorizontalScrollIndicator = false
         cv.register(OurPropertiesCell.self, forCellWithReuseIdentifier: "OurPropertiesCell")
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
+        
     }()
 
 
     lazy var termAndConditionButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
         btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 12)
         btn.setTitle("TERM & CONDITIONS", for: .normal)
         btn.addTarget(self, action: #selector(handlePrivacyStatments), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.numberOfLines = 1
+        btn.contentVerticalAlignment = .center
+        btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
         return btn
     }()
 
 
     lazy var privacyStatmentButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
         btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 12)
         btn.setTitle("PRIVACY STATEMENT", for: .normal)
         btn.addTarget(self, action: #selector(handlePrivacyStatments), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.numberOfLines = 1
+        btn.contentVerticalAlignment = .center
+        btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
         return btn
     }()
 
@@ -239,44 +253,121 @@ class BookCell: UITableViewCell{
 
 class OurPropertiesCell: UICollectionViewCell{
 
+    var hotelDetail: ListOfAvailableHotels? {
+        didSet{
+            locationButton.setTitle(hotelDetail?.hotelAddress, for: .normal)
+            callButton.setTitle(hotelDetail?.hotelTelNo, for: .normal)
+            whatsAppButton.setTitle(hotelDetail?.hotelWhatsAppNo, for: .normal)
+            if let startingPrice = hotelDetail?.startingPrice{
+                startFromLabel.text = "Starts from \(startingPrice)"
+            }
+            guard let hotelName = hotelDetail?.hotelName else {
+                return
+            }
+            if let rating = hotelDetail?.hotelRating{
+                var ratingString = String()
+                ratingString.append(" ")
+                if let starRating = Double(rating) {
+                    for _ in 1...Int(starRating){
+                        ratingString.append("★")
+                    }
+                    hotelNameText.attributedText = hotelNameText.convertAttributeString(firstString: hotelName, secondString: ratingString, firstColor: #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), secondColor: #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1))
+                    
+                }
+            }
+        }
+    }
+
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
+        contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+       // contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
     }
 
     func addViews(){
+        
         addSubview(backgroundImageView)
-        backgroundImageView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        backgroundImageView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor)
+        backgroundImageView.heightAnchor.constraint(equalToConstant: Constants.StandardSize.TABLEROWHEIGHT ).isActive = true
 
-        let blackView = BlackView()
-        addSubview(blackView)
-        blackView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        addSubview(hotelNameText)
+        hotelNameText.anchorWithConstantsToTop(top: backgroundImageView.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 4, rightConstant: 16 )
+        
+        
+        let locationImage = hotelNameText.buttonIcons(image: #imageLiteral(resourceName: "marker"))
+        addSubview(locationImage)
+        
+        addSubview(locationButton)
+        locationButton.anchorWithConstantsToTop(top: hotelNameText.bottomAnchor, left: locationImage.rightAnchor, bottom: nil, right: nil, topConstant: 16, leftConstant: 4, bottomConstant: 16, rightConstant: 16)
+        locationButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 112) / 1.5).isActive = true
+        
+    
+        locationImage.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        locationImage.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        locationImage.centerYAnchor.constraint(equalTo: locationButton.centerYAnchor).isActive = true
+        locationImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
+        
 
-        addSubview(startFromLabel)
-        startFromLabel.anchorWithConstantsToTop(top: nil, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
-        startFromLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1).isActive = true
-        startFromLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
-
-        addSubview(lastroomsLabel)
-        lastroomsLabel.anchorWithConstantsToTop(top: nil, left: startFromLabel.rightAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 8, bottomConstant: 16, rightConstant: 16)
-        lastroomsLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1).isActive = true
-        lastroomsLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
-
-        addSubview(uberButton)
-        uberButton.anchorWithConstantsToTop(top: nil, left: leftAnchor, bottom: startFromLabel.topAnchor, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
-        uberButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.12).isActive = true
-
-
+        
+        let milesImage = hotelNameText.buttonIcons(image: #imageLiteral(resourceName: "miles"))
+        addSubview(milesImage)
+        
+        addSubview(milesButton)
+        milesButton.anchorWithConstantsToTop(top: hotelNameText.bottomAnchor, left: milesImage.rightAnchor, bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 4, bottomConstant: 4, rightConstant: 16)
+        
+        
+        milesImage.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        milesImage.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        milesImage.centerYAnchor.constraint(equalTo: milesButton.centerYAnchor).isActive = true
+        milesImage.leftAnchor.constraint(equalTo: locationButton.rightAnchor, constant: 8).isActive = true
+        
+        
+        
+        
+        let callImage = hotelNameText.buttonIcons(image: #imageLiteral(resourceName: "call-answer"))
+        addSubview(callImage)
+        
         addSubview(callButton)
-        callButton.anchorWithConstantsToTop(top: nil, left: leftAnchor, bottom: uberButton.topAnchor, right: nil, topConstant: 0, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
-        callButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.12).isActive = true
-        callButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
-
+        callButton.anchorWithConstantsToTop(top: locationButton.bottomAnchor , left: callImage.rightAnchor, bottom: nil, right: nil, topConstant: 12, leftConstant: 4, bottomConstant: 4, rightConstant: 16)
+        
+        callButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 112) / 2).isActive = true
+        
+        
+        callImage.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        callImage.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        callImage.centerYAnchor.constraint(equalTo: callButton.centerYAnchor).isActive = true
+        callImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
+        
+        
+        let whatsAppImage = hotelNameText.buttonIcons(image: #imageLiteral(resourceName: "whatsapp-logo"))
+        addSubview(whatsAppImage)
+        
         addSubview(whatsAppButton)
-        whatsAppButton.anchorWithConstantsToTop(top: nil, left: callButton.rightAnchor, bottom: uberButton.topAnchor, right: nil, topConstant: 0, leftConstant: 8, bottomConstant: 8, rightConstant: 16)
-        whatsAppButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.12).isActive = true
-        whatsAppButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
-
+        whatsAppButton.anchorWithConstantsToTop(top: locationButton.bottomAnchor, left: whatsAppImage.rightAnchor, bottom: nil, right: rightAnchor, topConstant: 12, leftConstant: 4, bottomConstant: 4, rightConstant: 16)
+        
+        
+        whatsAppImage.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        whatsAppImage.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        whatsAppImage.centerYAnchor.constraint(equalTo: whatsAppButton.centerYAnchor).isActive = true
+        whatsAppImage.leftAnchor.constraint(equalTo: callButton.rightAnchor, constant: 8).isActive = true
+        
+        
+        
+        
+        
+        
+        addSubview(startFromLabel)
+        startFromLabel.anchorWithConstantsToTop(top: callButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 4, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+        
+        
+        
+        
+        
+        
+        
+        
 
     }
 
@@ -293,69 +384,86 @@ class OurPropertiesCell: UICollectionViewCell{
         return iv
     }()
 
-    lazy var uberButton: UIButton = {
-        let btn = UIButton(type: .custom)
+    lazy var locationButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("123 Road, London, Ab1 CD 2", for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.titleLabel?.numberOfLines = 2
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
+       // btn.addTarget(self, action: #selector(searchRooms), for: .touchUpInside)
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("Book an Uber", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
-        btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        /// btn.imageEdgeInsets = UIEdgeInsets(top: 4, left: 20, bottom: 4, right: 20)
-        // btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
-        //btn.backgroundColor = .white
         btn.contentHorizontalAlignment = .left
-        btn.imageView?.contentMode = .scaleAspectFit
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
         return btn
-
     }()
-
+    
+    lazy var milesButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("10 Miles", for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.contentHorizontalAlignment = .left
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
+       // btn.addTarget(self, action: #selector(searchRooms), for: .touchUpInside)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.numberOfLines = 1
+        return btn
+    }()
+    
+    
+    
+    
     lazy var callButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("020 5482 5267", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
         btn.contentHorizontalAlignment = .left
         btn.imageView?.contentMode = .scaleAspectFit
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.numberOfLines = 1
         return btn
-
+        
     }()
-
-
+    
+    
     lazy var whatsAppButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("07258454834", for: .normal)
-        btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        // btn.setImage(#imageLiteral(resourceName: "uber").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.setTitleColor(#colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1), for: .normal)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         btn.tintColor =  #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
         btn.contentHorizontalAlignment = .left
-        //     btn.imageView?.contentMode = .
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.numberOfLines = 1
         return btn
-
+        
     }()
-
+    
     let startFromLabel: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.text = "Starts from £2000"
-        lbl.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        lbl.textColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
         lbl.font = UIFont.boldSystemFont(ofSize: 13)
         return lbl
     }()
-
-    let lastroomsLabel: UILabel = {
+    
+    let hotelNameText: UILabel = {
         let lbl = UILabel()
+        lbl.text = "The Montcalm London Marble Arch"
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.text = "Last 2 rooms left"
-        lbl.font = UIFont.boldSystemFont(ofSize: 13)
-        lbl.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        lbl.font = UIFont.boldSystemFont(ofSize: 15)
+        lbl.numberOfLines = 0
+        lbl.textColor = #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)
         return lbl
     }()
+    
+   
+
 
 
 }

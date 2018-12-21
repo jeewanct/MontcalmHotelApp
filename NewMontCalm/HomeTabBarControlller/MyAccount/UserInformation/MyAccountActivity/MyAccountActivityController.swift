@@ -17,8 +17,13 @@ class MyAccountActivityController: UITableViewController{
         setup()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
     func setup(){
 
+        
         title = "Bookings"
         view.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         tableView.register(MyAccountActivityCell.self , forCellReuseIdentifier: "MyAccountActivityCell")

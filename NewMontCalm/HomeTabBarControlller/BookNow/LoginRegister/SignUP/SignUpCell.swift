@@ -8,10 +8,12 @@
 
 import UIKit
 
-class PersonalDetailsCell: UITableViewCell{
+class PersonalDetailsCell: UITableViewCell, UITextFieldDelegate{
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
+        selectionStyle = .none
         addViews()
     }
 
@@ -22,6 +24,17 @@ class PersonalDetailsCell: UITableViewCell{
         personTitleButton.addBorder(textField: personTitleButton)
         dateOfBirthButton.addBorder(textField: dateOfBirthButton)
 
+    }
+
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool{
+
+        if textField == firstNameText{
+            lastNameText.becomeFirstResponder()
+        }else{
+            lastNameText.resignFirstResponder()
+        }
+        return true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -38,21 +51,29 @@ class PersonalDetailsCell: UITableViewCell{
         return btn
     }()
 
-    let firstNameText: UITextField = {
+    lazy var firstNameText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.textAlignment = .right
         tf.backgroundColor = .white
         tf.placeholder = "First Name"
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
+        tf.delegate = self
         return tf
     }()
 
-    let lastNameText: UITextField = {
+    lazy var lastNameText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.contentHorizontalAlignment = .right
         tf.backgroundColor = .white
         tf.textAlignment = .right
+        tf.delegate = self
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
         tf.placeholder = "Last Name"
         return tf
     }()
@@ -71,23 +92,41 @@ class PersonalDetailsCell: UITableViewCell{
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.contentHorizontalAlignment = .right
         btn.setTitleColor(.black, for: .normal)
-         btn.backgroundColor = .white
+        btn.backgroundColor = .white
         btn.setTitle("Male", for: .normal)
         return btn
     }()
 
 
+  
+
 }
 
-class AddressDetails: UITableViewCell {
+class AddressDetails: UITableViewCell, UITextFieldDelegate {
+
+    let countryView = CurrencyView()
+    var countrySearchResult: [GetCountry]?
+    var countryList: [GetCountry]?{
+        didSet{
+            countrySearchResult = countryList
+        }
+    }
+
+    var countryDetails: GetCountry?{
+        didSet{
+            countryButton.setTitle(countryDetails?.countryName, for: .normal)
+        }
+    }
+
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addViews()
+        selectionStyle = .none
+        backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
     }
 
     override func draw(_ rect: CGRect) {
-
 
         address1Text.addBorder(textField: address1Text)
         address2Text.addBorder(textField: address2Text)
@@ -100,64 +139,115 @@ class AddressDetails: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool{
 
-    let address1Text: UITextField = {
+        switch textField{
+        case address1Text:
+            address2Text.becomeFirstResponder()
+        case address2Text:
+            cityText.becomeFirstResponder()
+        case cityText:
+            stateText.becomeFirstResponder()
+        case stateText:
+            stateText.resignFirstResponder()
+        default:
+            zipText.resignFirstResponder()
+        }
+        return true
+    }
+
+    @objc func handleOpenCountry(){
+
+        if let window = UIApplication.shared.keyWindow{
+
+            countryView.contentTable.delegate = self
+            countryView.contentTable.dataSource = self
+            countryView.searchBar.delegate = self
+            window.addSubview(countryView)
+            countryView.anchorToTop(top: window.topAnchor, left: window.leftAnchor, bottom: window.bottomAnchor, right: window.rightAnchor)
+        }
+
+    }
+
+
+    lazy var address1Text: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.textAlignment = .right
         tf.backgroundColor = .white
         tf.placeholder = "Address 1"
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
+        tf.delegate = self
         return tf
     }()
 
-    let address2Text: UITextField = {
+    lazy var address2Text: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.contentHorizontalAlignment = .right
         tf.backgroundColor = .white
         tf.textAlignment = .right
         tf.placeholder = "Address 2"
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
+        tf.delegate = self
         return tf
     }()
 
-    let cityText: UITextField = {
+    lazy var cityText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.contentHorizontalAlignment = .right
         tf.backgroundColor = .white
         tf.textAlignment = .right
         tf.placeholder = "City Name"
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
+        tf.delegate = self
         return tf
     }()
 
-    let stateText: UITextField = {
+    lazy var stateText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.contentHorizontalAlignment = .right
         tf.backgroundColor = .white
         tf.textAlignment = .right
+        tf.delegate = self
         tf.placeholder = "State Name"
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
         return tf
     }()
 
 
-    let countryButton: UIButton = {
+    lazy var countryButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.contentHorizontalAlignment = .right
         btn.setTitleColor(.black, for: .normal)
         btn.backgroundColor = .white
         btn.setTitle("Select Country", for: .normal)
+        btn.addTarget(self, action: #selector(handleOpenCountry), for: .touchUpInside)
         return btn
     }()
 
-    let zipText: UITextField = {
+    lazy var zipText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.contentHorizontalAlignment = .right
         tf.backgroundColor = .white
         tf.textAlignment = .right
+        tf.delegate = self
         tf.placeholder = "Zip Code"
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
         return tf
     }()
 
@@ -167,18 +257,23 @@ class AddressDetails: UITableViewCell {
 }
 
 
-class ContactInformationCell: UITableViewCell {
+class ContactInformationCell: UITableViewCell, UITextFieldDelegate {
 
+    var passwordHeightAnchor: NSLayoutConstraint?
+    var confirmPassHeightAnchor: NSLayoutConstraint?
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addViews()
+        selectionStyle = .none
+        backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
     }
 
     override func draw(_ rect: CGRect) {
         phoneNumberText.addBorder(textField: phoneNumberText)
-        faxNumberText.addBorder(textField: faxNumberText)
+      //  faxNumberText.addBorder(textField: faxNumberText)
         emailAddressText.addBorder(textField: emailAddressText)
-        confirmEmailText.addBorder(textField: confirmEmailText)
+       // confirmEmailText.addBorder(textField: confirmEmailText)
         passwordText.addBorder(textField: passwordText)
     }
 
@@ -186,47 +281,81 @@ class ContactInformationCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool{
 
-    let phoneNumberText: UITextField = {
+        switch textField{
+        case phoneNumberText:
+             emailAddressText.becomeFirstResponder()
+        case emailAddressText:
+            passwordText.becomeFirstResponder()
+        case passwordText:
+            confirmPasswordText.becomeFirstResponder()
+        default:
+            confirmPasswordText.resignFirstResponder()
+        }
+        return true
+    }
+
+
+    lazy var phoneNumberText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.textAlignment = .right
         tf.backgroundColor = .white
         tf.placeholder = "Phone Number"
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
+        tf.delegate = self
+        tf.keyboardType = .phonePad
         return tf
     }()
 
-    let faxNumberText: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.contentHorizontalAlignment = .right
-        tf.backgroundColor = .white
-        tf.textAlignment = .right
-        tf.placeholder = "Fax Number"
-        return tf
-    }()
+//    lazy var faxNumberText: UITextField = {
+//        let tf = UITextField()
+//        tf.translatesAutoresizingMaskIntoConstraints = false
+//        tf.contentHorizontalAlignment = .right
+//        tf.backgroundColor = .white
+//        tf.textAlignment = .right
+//        tf.placeholder = "Fax Number"
+//        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+//        tf.leftView = leftView
+//        tf.leftViewMode = .always
+//        tf.delegate = self
+//        return tf
+//    }()
 
-    let emailAddressText: UITextField = {
+    lazy var emailAddressText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.contentHorizontalAlignment = .right
         tf.backgroundColor = .white
         tf.textAlignment = .right
         tf.placeholder = "Email Text"
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
+        tf.keyboardType = .emailAddress
+        tf.delegate = self
         return tf
     }()
 
-    let confirmEmailText: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.contentHorizontalAlignment = .right
-        tf.backgroundColor = .white
-        tf.textAlignment = .right
-        tf.placeholder = "Confirm Email"
-        return tf
-    }()
+//    lazy var confirmEmailText: UITextField = {
+//        let tf = UITextField()
+//        tf.translatesAutoresizingMaskIntoConstraints = false
+//        tf.contentHorizontalAlignment = .right
+//        tf.backgroundColor = .white
+//        tf.textAlignment = .right
+//        tf.placeholder = "Confirm Email"
+//        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+//        tf.leftView = leftView
+//        tf.keyboardType = .emailAddress
+//        tf.leftViewMode = .always
+//        tf.delegate = self
+//        return tf
+//    }()
 
-    let passwordText: UITextField = {
+    lazy var passwordText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.contentHorizontalAlignment = .right
@@ -234,20 +363,28 @@ class ContactInformationCell: UITableViewCell {
         tf.textAlignment = .right
         tf.placeholder = "Password"
         tf.isSecureTextEntry = true
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
+        tf.delegate = self
         return tf
     }()
 
 
 
 
-    let confirmPasswordText: UITextField = {
+    lazy var confirmPasswordText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.contentHorizontalAlignment = .right
         tf.backgroundColor = .white
         tf.textAlignment = .right
         tf.placeholder = "Confirm Password"
+        tf.delegate = self
         tf.isSecureTextEntry = true
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 32) * 0.43, height: 0))
+        tf.leftView = leftView
+        tf.leftViewMode = .always
         return tf
     }()
 
@@ -259,41 +396,50 @@ class ContactInformationCell: UITableViewCell {
 
 class AdditionalInformationCell: UITableViewCell {
 
+    var parentInstance: SignUpController?
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addViews()
+        backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
+        selectionStyle = .none
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    let submitButton: UIButton = {
+    
+
+    lazy var submitButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.backgroundColor = Constants.Appearance.PRIMARYCOLOR
         btn.setTitleColor(.white, for: .normal)
         btn.setTitle("SUBMIT", for: .normal)
-        return btn
-    }()
-
-    let acceptButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitleColor(.white, for: .normal)
-        btn.layer.borderColor = Constants.Appearance.PRIMARYCOLOR.cgColor
-        btn.layer.borderWidth = (UIScreen.main.bounds.width - 32) * 0.01
-        return btn
-    }()
-
-
-    let ageButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitleColor(.white, for: .normal)
-        btn.layer.borderColor = Constants.Appearance.PRIMARYCOLOR.cgColor
-        btn.layer.borderWidth = (UIScreen.main.bounds.width - 32) * 0.01
         btn.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
+        return btn
+    }()
+
+    lazy var acceptButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitleColor(.white, for: .normal)
+        btn.layer.borderColor = Constants.Appearance.PRIMARYCOLOR.cgColor
+        btn.layer.borderWidth = 2
+        btn.tag = 0
+        btn.addTarget(self, action: #selector(handleAccept), for: .touchUpInside)
+        return btn
+    }()
+
+
+    lazy var ageButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitleColor(.white, for: .normal)
+        btn.layer.borderColor = Constants.Appearance.PRIMARYCOLOR.cgColor
+        btn.layer.borderWidth = 2
+        btn.tag = 0
+        btn.addTarget(self, action: #selector(handleAge), for: .touchUpInside)
         return btn
     }()
 }

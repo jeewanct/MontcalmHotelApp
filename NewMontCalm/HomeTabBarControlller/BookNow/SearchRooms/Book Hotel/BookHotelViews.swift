@@ -50,8 +50,14 @@ extension BookHotelNow{
         // bootom view
 
         view.addSubview(containerView)
-        containerView.anchorToTop(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        containerView.anchorToTop(top: nil, left: view.leftAnchor, bottom: nil, right: view.rightAnchor)
         containerView.heightAnchor.constraint(equalToConstant:49).isActive = true
+
+        if #available(iOS 11.0, *){
+            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        }else{
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
 
         containerView.addSubview(comparePricesButton)
         comparePricesButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
@@ -64,6 +70,8 @@ extension BookHotelNow{
         bookNowButton.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.8).isActive = true
         bookNowButton.rightAnchor.constraint(equalTo: containerView.rightAnchor,constant: -8).isActive = true
         bookNowButton.leftAnchor.constraint(equalTo: comparePricesButton.rightAnchor,constant: 8).isActive = true
+
+
 
     }
     

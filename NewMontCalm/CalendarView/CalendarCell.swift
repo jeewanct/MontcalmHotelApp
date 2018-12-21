@@ -64,9 +64,6 @@ class CalendarCell: JTAppleCell{
         shape1.shouldRasterize = true
         rightView.layer.mask = shape1
 
-
-
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -82,7 +79,7 @@ class CalendarCell: JTAppleCell{
     let selectedView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .orange
+        view.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
         //  view.layer.cornerRadius = (UIScreen.main.bounds.height * 0.6 * 0.2 )/2
         view.isHidden = true
         return view

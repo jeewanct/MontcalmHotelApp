@@ -11,8 +11,7 @@ import UIKit
 extension Restaurants{
 
     func addViews(){
-
         addSubview(hotelDetailTableView)
-        hotelDetailTableView.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 8, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+        hotelDetailTableView.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
 }

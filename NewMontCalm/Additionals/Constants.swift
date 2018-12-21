@@ -12,6 +12,73 @@ import UIKit
 class Constants{
 
 
+    //http://apithemontcalm.neowebservices.co.uk/api/V2/ws/getAvailableRooms
+//http://apithemontcalm.neowebservices.co.uk/api/V2/ws/getAvailableEnhancements
+
+//    {
+//    "propertyId": "94",
+//    "checkIn": "2018-01-15",
+//    "checkOut": "2018-01-16",
+//    "sortBy": "Price",
+//    "sortOrder": "asc",
+//    "promoCode": "",
+//    "room_detail_info": [
+//    {
+//    "rate_rule_id": "2748",
+//    "isDefaultStatus": false,
+//    "rate_rule_name": "Bed and Breakfast Select",
+//    "included_packages": "LIGHTBR:",
+//    "max_adults": "2",
+//    "applied_rate_rule_id": "2",
+//    "pms_rate_rule_id": "PMOBBS",
+//    "room_type_name": "Deluxe Double (Complimentary Internet)",
+//    "rate_rule_type": "spl",
+//    "room_type_id": "445",
+//    "room_units": "1",
+//    "adult_per_room": [
+//    2
+//    ]
+//    },
+//    {
+//    "rate_rule_id": "2748",
+//    "isDefaultStatus": false,
+//    "rate_rule_name": "Bed and Breakfast Select",
+//    "included_packages": "LIGHTBR:",
+//    "max_adults": "2",
+//    "applied_rate_rule_id": "2",
+//    "pms_rate_rule_id": "PMOBBS",
+//    "room_type_name": "Executive Club Double(Complimentary Internet)",
+//    "rate_rule_type": "spl",
+//    "room_type_id": "127",
+//    "room_units": "1",
+//    "adult_per_room": [
+//    2
+//    ]
+//    },
+//    {
+//    "rate_rule_id": "2",
+//    "isDefaultStatus": true,
+//    "rate_rule_name": "Best Available Rate",
+//    "included_packages": "",
+//    "max_adults": "2",
+//    "applied_rate_rule_id": "0",
+//    "pms_rate_rule_id": "BMCEB",
+//    "room_type_name": "Montcalm Club Twin(Complimentary Internet)",
+//    "rate_rule_type": "bar",
+//    "room_type_id": "135",
+//    "room_units": "1",
+//    "adult_per_room": [
+//    2
+//    ]
+//    }
+//    ]
+//    }
+//    {
+//    "checkIn": "2017-12-15",
+//    "checkOut": "2017-12-16",
+//    "propertyId": "128"
+//    }
+
     struct Fonts{
         static let FONTLIGHT = "LATO-LIGHT"
         static let FONTREGULAR = "LATO-REGULAR"
@@ -23,13 +90,36 @@ class Constants{
     
     struct ApisUrl{
         static let GOOGLEAPI = "AIzaSyDfC0pHPv-eCmUFbIrtuWrJL2Ci2wRjeDI"
+
+
     }
 
     struct CustomApis{
-        static let HOMEURL = "https://api.themontcalm.com/V2/ws"
+        
+        static let HOMEURL = "http://apithemontcalm.neowebservices.co.uk" 
         static let LOGIN = "/TheMontcalmClub/loginUser"
-        static let HOTELLIST = "/getAvailableHotels"
-        static let HOTELFACILITIES = "/getHotelFacilityList"
+        static let GETCURRENCY = "/api/V2/ws/getAllCurrencies"
+        static let GETCOUNTRYLIST = "/api/V2/ws/getAllCountries"
+        static let GETTEMPERATURE = ""
+        static let GETHOMECONTACT = "/api/V2/ws/getAllContacts"
+        static let GETAVAILABLEHOTEL = "/api/V2/ws/getAvailableHotels"
+
+
+        static let GETWELLNESS = "/api/V2/ws/getAllSpa"
+        static let GETRESTAURANTANDBAR = "/api/V2/ws/getAllRestaurants"
+        static let GETPACKAGES = "/api/V2/ws/getAllPackages"
+        static let GETMEETINGANDEVENTS = "/api/V2/ws/getAllMeetingEvents"
+        static let GETSPECIFICHOTELDETAIL = "/api/V2/ws/getHotelDetails"
+        static let GETSPECIFICROOMDETAIL = "/api/V2/ws/getRoomDetails"
+        static let GETOFFERS = "/api/V2/ws/getAllOffers"
+
+        static let REGISTERUSER = "/api/V2/ws/TheMontcalmClub/registerUser"
+        static let LOGINUSER = "/api/V2/ws/TheMontcalmClub/loginUser"
+        static let UPDATEUSERDETAILS = "/api/V2/ws/TheMontcalmClub/updateUserProfile"
+        // Avaialable rooms
+        static let GETAVAILABELROOMS = "/api/V2/ws/getAvailableRooms"
+        static let GETBOOKINGHISTORY = "/api/V2/ws/getReservationHistory"
+
     }
     
     struct AlertConstants{

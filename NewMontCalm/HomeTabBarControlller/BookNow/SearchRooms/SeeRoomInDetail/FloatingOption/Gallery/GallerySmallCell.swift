@@ -9,7 +9,17 @@
 import UIKit
 
 class GallerySmallCell: UICollectionViewCell{
-    
+
+
+    var galleryImage: String?{
+        didSet{
+            if let imageUrl = galleryImage, let imageUrlRequest = URL(string: imageUrl){
+                backgroundImage.pin_updateWithProgress = true
+                backgroundImage.pin_setImage(from: imageUrlRequest)
+            }
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()

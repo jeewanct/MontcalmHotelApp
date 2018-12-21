@@ -12,72 +12,130 @@ extension SearchRooms{
     
     // MARK: Table view delegates
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        navigationController?.pushViewController(SeeRoomInDetail(), animated: true)
+    func viewHotelInDetail(hotelId: Int){
+        let seeRoomInDetailObj = SeeRoomInDetail()
+        seeRoomInDetailObj.hotelId = hotelList?[hotelId].hotelId
+        navigationController?.pushViewController(seeRoomInDetailObj, animated: true)
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        viewHotelInDetail(hotelId: indexPath.section)
+
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return hotelList?.count ?? 0
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = SearchRoomsHeaderView()
+        headerView.hotelImageUrl = hotelList?[section].hotelImageUrl
+        headerView.parentInstance = self
+        headerView.hotelId = section
+        return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        return Constants.StandardSize.TABLEROWHEIGHT 
+    }
+
+   
     
     // MARK: Table View Data Source delegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10//hotelList?.list?.count ?? 0
+        return 1//hotelList?.list?.count ?? 0
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Constants.StandardSize.TABLEROWHEIGHT + UIScreen.main.bounds.height * 0.07
-    }
-    
+   
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchRooms", for: indexPath) as! SearchRoomCell
         cell.selectionStyle = .none
         cell.searchRoomInstance = self
-       // cell.hotelList = hotelList?.list?[indexPath.item]
+        cell.hotelDetail = hotelList?[indexPath.section]
         return cell
     }
 }
 
 extension SearchRooms{
 
-
-    func apiCall(){
-
-        ApiService.shared.postMethod(url: Constants.CustomApis.HOMEURL + Constants.CustomApis.HOTELLIST, bodyParameter: ["checkIn":"2017-10-12","checkOut":"2017-10-13"]) { (data) in
-
-
-
-            do{
-               // print(try JSONSerialization.jsonObject(with: data, options: .mutableContainers))
-
-                self.hotelList = try JSONDecoder().decode(SearchRoomModel.self, from: data)
-
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-                
-            }catch _ {
-
-            }
-
+    
+    
+    
+    @objc func stopAnimation(){
+        
+        activityIndicator.close()
+    }
+    
+    @objc func handleApiCall(){
+        
+    //    print(dates?["checkIn"])
+        
+        var serverData = [
+            "checkIn": "",
+            "checKOut": ""
+        ]
+        
+        if let checkInDate = dates?["checkIn"], let checkOutDate = dates?["checkOut"]
+        {
+            serverData.updateValue(LogicHelper.shared.convertDateToServerFormat(date: checkInDate), forKey: "checkIn")
+            serverData.updateValue(LogicHelper.shared.convertDateToServerFormat(date: checkOutDate), forKey: "checkOut")
         }
 
+        
+        let obj = ViewControllersHTTPRequest()
+        obj.getAvailableHotels(userInfo: serverData, completion: { (data) in
+            if let hotelLists = data.hotelList{
+                self.performSelector(onMainThread: #selector(self.stopAnimation), with: nil, waitUntilDone: false)
+                self.hotelList = hotelLists
+            }
+
+            self.tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+        }) { (error) in
+        }
     }
+
+    
+
+    
 
 
     @objc func handleToggleMap(){
-        navigationController?.pushViewController(RoomsMap(), animated: true)
+        let roomsMapObj = RoomsMap()
+        roomsMapObj.hotelList = hotelList
+        navigationController?.pushViewController(roomsMapObj, animated: true)
+
     }
 
     func call(){
 
     }
 
-    func uber(){
 
-    }
+    func bookNow(hotelId: String){
 
-    func bookNow(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
-        navigationController?.pushViewController(BookHotelNow(collectionViewLayout: layout), animated: true)
+        let obj = BookHotelNow(collectionViewLayout: layout)
+
+
+        if let checkInDate = dates?["checkIn"], let checkOutDate = dates?["checkOut"]{
+
+            obj.serverBodyData = [
+                "checkIn" : LogicHelper.shared.convertDateToServerFormat(date: checkInDate),
+                "checkOut" : LogicHelper.shared.convertDateToServerFormat(date: checkOutDate),
+                "propertyId" : hotelId
+            ]
+
+             navigationController?.pushViewController(obj, animated: true)
+
+        }
+
+
+
     }
     
 

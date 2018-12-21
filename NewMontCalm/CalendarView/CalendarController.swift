@@ -9,8 +9,22 @@
 import UIKit
 import JTAppleCalendar
 
-class CalendarController: UIViewController {
-
+class CalendarController: UIViewController, OpenCalendar {
+   
+    
+    func openCalendar(value: Int) {
+        if value == 1 {
+            calendarType = CalendarType.checkInDate
+        }else{
+            calendarType = CalendarType.checkOutDate
+        }
+    }
+    
+    
+        let dateView = CheckInCheckOutView()
+    
+    var delegate: getCheckInOutDate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -18,7 +32,7 @@ class CalendarController: UIViewController {
     }
 
     func setup(){
-        view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         addViews()
 
     }
@@ -41,15 +55,11 @@ class CalendarController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        addSubLayer(layerView: checkInView, shapeLayer: checkInLayer, toValue: 1.0, fromValue: 0.0, color: UIColor.brown)
+       // addSubLayer(layerView: checkInView, shapeLayer: checkInLayer, toValue: 1.0, fromValue: 0.0, color: UIColor.brown)
 
     }
 
     
-    var checkInView: CardView!
-    var checkOutView: CardView!
-    var checkInLayer = CAShapeLayer()
-    var checkOutLayer = CAShapeLayer()
     var calendarType : CalendarType!
     var currentCheckInDate : Date!
     var currentCheckOutDate : Date!
@@ -58,6 +68,8 @@ class CalendarController: UIViewController {
         case checkInDate
         case checkOutDate
     }
+    
+
 
     
     let confirmButton: UIButton = {
@@ -77,6 +89,7 @@ class CalendarController: UIViewController {
         view.minimumInteritemSpacing = 0
         view.allowsMultipleSelection = true
         view.isRangeSelectionUsed = true
+        view.scrollDirection = .horizontal
         view.showsVerticalScrollIndicator = false
         view.isPagingEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -89,21 +102,7 @@ class CalendarController: UIViewController {
         return view
     }()
 
-    lazy var checkInButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.backgroundColor = .white
-        btn.addTarget(self, action: #selector(handleCheckIn), for: .touchUpInside)
-        return btn
-    }()
-
-    lazy var checkOutButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.backgroundColor = .white
-        btn.addTarget(self, action: #selector(handleCheckOut), for: .touchUpInside)
-        return btn
-    }()
+  
 
     func alertController(controller: UIViewController){
         let alert = UIAlertController(title: "Alert", message: "Don't click it ", preferredStyle: .alert)

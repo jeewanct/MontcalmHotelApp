@@ -10,16 +10,6 @@ import UIKit
 
 extension SeeRoomInDetail{
     
-//    func addfloatingButton(){
-//        
-//        if let window = UIApplication.shared.keyWindow{
-//            window.addSubview(floatingButton)
-//            floatingButton.anchorWithConstantsToTop(top: window.topAnchor, left: nil, bottom: nil, right: window.rightAnchor, topConstant: 28, leftConstant: 0, bottomConstant: 0, rightConstant: 16)
-//            floatingButton.heightAnchor.constraint(equalToConstant: 28).isActive = true
-//            floatingButton.widthAnchor.constraint(equalToConstant: 28).isActive = true
-//        }
-//    }
-    
 }
 
 extension SeeRoomInDetail: UITableViewDataSource{
@@ -49,26 +39,37 @@ extension SeeRoomInDetail: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
 
-
-
-
-            print("Frame is ", tableView.cellForRow(at: indexPath)?.frame)
-
         switch indexPath.item {
         case 0:
-            navigate(tempView: Gallery(), navigationTitle: "Gallery")
+            let obj = Gallery()
+            obj.galleryData = hotelDetailData?.gallery
+            navigate(tempView: obj, navigationTitle: "Gallery")
         case 1:
-            navigate(tempView: Restaurants(), navigationTitle: "Meeting & Events")
+            let meetings = Restaurants()
+            meetings.meetingEventsData = meetingsData
+            meetings.hotelDetailType = ExploreSelectionEnum.meetings
+            navigate(tempView: meetings, navigationTitle: "Meeting & Events")
         case 2:
-            navigate(tempView: Restaurants(), navigationTitle: "Packages")
+            let packages = Restaurants()
+            packages.packageData = packageData
+            packages.hotelDetailType = ExploreSelectionEnum.packages
+            navigate(tempView: packages, navigationTitle: "Packages")
         case 3:
-            navigate(tempView: FloatingOffers(), navigationTitle: "Offers")
+            let offersObject = FloatingOffers()
+            offersObject.offersList = self.offersData
+            navigate(tempView: offersObject, navigationTitle: "Offers")
         case 4:
             let restaurants = Restaurants()
             restaurants.seeRoomInstance = self
+            restaurants.restaurantData = restaurantBarData
+            restaurants.hotelDetailType = ExploreSelectionEnum.restaurants
             navigate(tempView: restaurants, navigationTitle: "Restaurants")
         default:
-            navigate(tempView: FloatingBookView(), navigationTitle: "Book Now")
+            let obj = FloatingBookView()
+            obj.hotelDetailData = self.hotelDetailData
+            obj.OpenRoomDetailsDelegate = self
+            self.view = obj
+            navigate(tempView: obj, navigationTitle: "Book Now")
         }
     
     }
@@ -88,36 +89,132 @@ extension SeeRoomInDetail: UITableViewDelegate{
 
 
 
-extension BookNowInformationCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
 
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        if collectionView == hotelFacilities{
-            return CGSize(width: UIScreen.main.bounds.width / 2.5, height: UIScreen.main.bounds.height * 0.07)
+
+// APi calls
+
+extension SeeRoomInDetail{
+
+    @objc  func getOffersList(){
+
+        guard let unwrapHotelId = hotelId else{
+            return
         }
-        return CGSize(width: UIScreen.main.bounds.width, height: Constants.StandardSize.TABLEROWHEIGHT)
-    }
+        let obj = ViewControllersHTTPRequest()
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
-    }
+        obj.getOffersParticularHotel(hotelId: ["hotel_id": unwrapHotelId], completion: { (data) in
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if collectionView == hotelFacilities{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FacilityCell", for: indexPath) as! FacilityCell
-            return cell
+
+            self.offersData = data.hotels?[0].offers // Change this
+
+
+        }) { (error) in
+            print(error)
         }
-        
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as! GalleryCollectionViewCell
-        return cell
     }
 
-}
+    @objc  func getRestaruantList(){
+
+        guard let unwrapHotelId = hotelId else{
+            return
+        }
+        let obj = ViewControllersHTTPRequest()
+
+        obj.getRestaurantAndBarsParticularHotel(hotelId: ["hotel_id": unwrapHotelId], completion: { (data) in
 
 
-extension BookNowInformationCell: UICollectionViewDelegate{
+            if let restaurants = data.hotels{
+                if restaurants.count > 0 {
+                     self.restaurantBarData = data.hotels?[0].restaurants
+                }
+            }
+
+
+            print("The restaurant list is", self.restaurantBarData)
+
+        }) { (error) in
+            print(error)
+        }
+    }
+
+
+    @objc  func getRestaruantMeetingAndEvents(){
+
+        guard let unwrapHotelId = hotelId else{
+            return
+        }
+        let obj = ViewControllersHTTPRequest()
+
+        obj.getMettingAndEventsParticularHotel(hotelId: ["hotel_id": unwrapHotelId], completion: { (data) in
+
+
+            if let meeting = data.hotels{
+                if meeting.count > 0 {
+                    self.meetingsData = data.hotels?[0].meetings
+                }
+            }
+
+
+            print("The restaurant list is", self.restaurantBarData)
+
+        }) { (error) in
+            print(error)
+        }
+    }
+
+    
+    @objc  func getRestaruantPackages(){
+
+        guard let unwrapHotelId = hotelId else{
+            return
+        }
+        let obj = ViewControllersHTTPRequest()
+
+        obj.getPackagesParticularHotel(hotelId: ["hotel_id": unwrapHotelId], completion: { (data) in
+
+
+            if let packages = data.hotels{
+                if packages.count > 0 {
+                    self.packageData = packages[0].packages
+                }
+            }
+
+
+
+        }) { (error) in
+            print(error)
+        }
+    }
+
+    @objc func stopAnimation(){
+        activityIndicator.close()
+    }
+
+    @objc  func getHotelDetails(){
+
+        guard let unwrapHotelId = hotelId else{
+            return
+        }
+        let obj = ViewControllersHTTPRequest()
+
+        obj.getParticularHotelDetails(hotelId: ["propertyId": unwrapHotelId], completion: { (data) in
+
+            self.hotelDetailData = data
+            self.performSelector(onMainThread: #selector(self.stopAnimation), with: nil, waitUntilDone: false)
+            DispatchQueue.main.async{
+                let obj = FloatingBookView()
+                obj.hotelDetailData = self.hotelDetailData
+                obj.OpenRoomDetailsDelegate = self
+                self.view = obj
+            }
+            print("The hotel details is ", self.hotelDetailData)
+
+        }) { (error) in
+            self.performSelector(onMainThread: #selector(self.stopAnimation), with: nil, waitUntilDone: false)
+        }
+    }
+
+
 
 }

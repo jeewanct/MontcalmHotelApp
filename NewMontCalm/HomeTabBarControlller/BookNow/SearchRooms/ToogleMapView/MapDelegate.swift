@@ -12,19 +12,21 @@ import GoogleMaps
 extension RoomsMap: GMSMapViewDelegate{
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        print("marker Tapped",marker.layer.bounds.origin.x, marker.layer.bounds.origin.y)
-        if placesScreen == nil{
-            placesScreenOn()
-        }
         return true
     }
-    
+
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         
     }
-    
-    
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        placesScreenOff()
+
+    func handleMapAdjustment(hotelValue: Int){
+        if hotelValue < hotelList?.count ?? 0 {
+            if let gethotelList = hotelList?[hotelValue]{
+                if let hotelLat = gethotelList.hotelLat, let hotelLang = gethotelList.hotelLang{
+                    mapView.animate(toLocation: CLLocationCoordinate2D(latitude: CLLocationDegrees(hotelLat)!, longitude: CLLocationDegrees(hotelLang)!))
+                }
+            }
+        }
     }
+
 }

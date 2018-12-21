@@ -9,11 +9,28 @@
 import UIKit
 
 class Offers: UITableViewController{
-    
+
+    var offersData: [OffersTabBarHotels]?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         setup()
+        callApi()
+        
+    }
+    
+    func callApi(){
+        
+        if let window = UIApplication.shared.keyWindow{
+            
+            window.addSubview(activityIndicator)
+            activityIndicator.activityIndicator.startAnimating()
+            activityIndicator.anchorToTop(top: window.topAnchor, left: window.leftAnchor, bottom: window.bottomAnchor, right: window.rightAnchor)
+            
+        }
+        
+        self.performSelector(inBackground: #selector(handleGetOffers), with: nil)
     }
     
     func setup(){
@@ -24,11 +41,12 @@ class Offers: UITableViewController{
         navigationItem.title = "Offers"
         tableView.register(OffersCell.self, forCellReuseIdentifier: "OffersCell")
         tableView.showsVerticalScrollIndicator = false
-        tableView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 16, right: 0)
         tableView.separatorStyle = .none
-       // self.edgesForExtendedLayout = [.bottom]
-        //self.hidesBottomBarWhenPushed = true
     }
+
+    let activityIndicator = ActivityIndicatorView()
+    
     
 }
 

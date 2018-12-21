@@ -8,40 +8,85 @@
 
 import UIKit
 
-class SeeRoomInDetail: UIViewController{
+protocol OpenRoomDetails {
+    func handleRoomDetails(roomId: String?)
+}
+class SeeRoomInDetail: UIViewController, OpenRoomDetails{
+
     var isButtonClicked = false
+    var offersData: [OffersTabBarHotelOffers]?
+    var restaurantBarData: [RestarurantHotelBars]?
+    var meetingsData: [MeetingEventsHotelDetails]?
+    var packageData: [PackagesDetails]?
+    var hotelDetailData: HotelDetailModel?
+
+
+    var hotelId: String?
     var bookNowView =  UIView()
-    
+
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
         setup()
-         view = FloatingBookView ()
 
-
-
+     //  view = FloatingBookView ()
         let rightButtonBar = UIBarButtonItem(image: #imageLiteral(resourceName: "Floating").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleFloatingButton))
-        navigationItem.rightBarButtonItem = rightButtonBar        
+        navigationItem.rightBarButtonItem = rightButtonBar
+
+
+        callApi()
+
+
     }
-    
+
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //addfloatingButton()
+        title = "Book Now"
+        navigationController?.hidesBarsOnSwipe = false
     }
-    
+
+    func callApi(){
+        
+        //if let window = UIApplication.shared.keyWindow{
+            view.addSubview(activityIndicator)
+            
+            activityIndicator.activityIndicator.startAnimating()
+            activityIndicator.anchorToTop(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+       // }
+       //
+        self.performSelector(inBackground: #selector(getOffersList), with: nil)
+        self.performSelector(inBackground: #selector(getRestaruantList), with: nil)
+        self.performSelector(inBackground: #selector(getRestaruantMeetingAndEvents), with: nil)
+        self.performSelector(inBackground: #selector(getRestaruantPackages), with: nil)
+        self.performSelector(inBackground: #selector(getHotelDetails), with: nil)
+        
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         floatingContentTableView.removeFromSuperview()
+        title = ""
     }
-    
+
+
+
     func setup(){
-        title = "Book Now"
         view.backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
         SearchRooms.checkInLabel.setTitle("", for: .normal)
         SearchRooms.checkOutLabel.setTitle("", for: .normal)
         view.backgroundColor = Constants.Appearance.BACKGROUNDCOLOR
-        navigationController?.hidesBarsOnSwipe = false
     }
+
+
+    func handleRoomDetails(roomId: String?){
+        let roomDetailsObj = RoomDetails()
+        roomDetailsObj.roomId = roomId
+        self.navigationController?.pushViewController(roomDetailsObj, animated: true)
+    }
+
 
     @objc func handleFloatingButton(){
         //view = Restaurants()
@@ -114,6 +159,7 @@ class SeeRoomInDetail: UIViewController{
         return btn
     }()
 
+    let activityIndicator = ActivityIndicatorView()
    
     
 

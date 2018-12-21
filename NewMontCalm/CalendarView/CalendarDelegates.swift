@@ -190,30 +190,20 @@ extension CalendarController{
 
 
     @objc func handleCheckIn(){
-        addSubLayer(layerView: checkInView, shapeLayer: checkInLayer, toValue: 1.0, fromValue: 0.0, color: UIColor.brown)
-        addSubLayer(layerView: checkOutView, shapeLayer: checkOutLayer, toValue: 0.0, fromValue: 1.0, color: UIColor.brown)
-
-
-        if calendarType == .checkOutDate{
-
-            showCheckIn()
-        }
+       
     }
 
     @objc func handleCheckOut(){
-        addSubLayer(layerView: checkOutView, shapeLayer: checkOutLayer, toValue: 1.0, fromValue: 0.0, color: UIColor.brown)
-        addSubLayer(layerView: checkInView, shapeLayer: checkInLayer, toValue: 0.0, fromValue: 1.0, color: UIColor.brown)
-
-        if calendarType == .checkInDate{
-
-            showCheckOut()
-        }
+        
 
 
     }
 
 
     @objc func handleConfirmButton(){
+        
+        delegate?.getCheckInCheckOutDate(checkInDate: currentCheckInDate, checkOutDate: currentCheckOutDate)
+        print("Check In and check out", currentCheckInDate, currentCheckOutDate)
         self.dismiss(animated: true)
     }
 
@@ -266,8 +256,8 @@ extension CalendarController: JTAppleCalendarViewDataSource {
         let dateFormatter = DateFormatter()
         let months = dateFormatter.monthSymbols
         if let monthName = months{
-            header.monthLabel.text = monthName[day - 1]
-            header.yearLabel.text = String(year)
+           // header.monthLabel.text = monthName[day - 1]
+           // header.yearLabel.text = String(year)
         }
 
         return header
@@ -339,10 +329,12 @@ extension CalendarController: JTAppleCalendarViewDelegate{
         if calendarType == .checkInDate{
 
             currentCheckInDate = date
+            dateView.checkIn = currentCheckInDate
 
             if currentCheckOutDate < currentCheckInDate{
 
                 currentCheckOutDate = changeDate(date: currentCheckInDate, by: 1)
+                dateView.checkOut = currentCheckOutDate
             }
 
             showCheckOut()
@@ -350,10 +342,12 @@ extension CalendarController: JTAppleCalendarViewDelegate{
         }else{
 
             currentCheckOutDate = date
+            dateView.checkOut = currentCheckOutDate
 
             if currentCheckInDate >= currentCheckOutDate{
 
                 currentCheckInDate = changeDate(date: currentCheckOutDate, by: -1)
+                dateView.checkIn = currentCheckInDate
             }
 
             // updateCheckOutLabelText()
@@ -400,6 +394,7 @@ extension CalendarController: JTAppleCalendarViewDelegate{
             if date > currentCheckInDate && date != currentCheckOutDate{
 
                 currentCheckInDate = date
+                dateView.checkIn = currentCheckInDate
 
                 showCheckOut()
 
@@ -413,7 +408,7 @@ extension CalendarController: JTAppleCalendarViewDelegate{
             if date < currentCheckOutDate && date != currentCheckInDate{
 
                 currentCheckOutDate = date
-
+                dateView.checkOut = currentCheckOutDate
                 //  updateCheckOutLabelText()
 
             }else if date == currentCheckInDate{

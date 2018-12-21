@@ -17,6 +17,7 @@ extension MyAccountMainCell: UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyAccountCell", for: indexPath) as! MyAccountCell
         cell.optionValue.text = ["Edit Profile", "My Account Activity", "Past Stay Credit Request", "Reedem Points","Message Center"][indexPath.item]
+        cell.parentInstance = parentInstance
         cell.selectionStyle = .none
         return cell
     }
@@ -33,12 +34,12 @@ extension MyAccountMainCell: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            print("0 Clicked")
+            let obj = SignUpController()
+            obj.screenType = ProfileValue.EDITPROFILE
+            parentInstance?.present(UINavigationController(rootViewController: obj), animated: true, completion: nil)
         case 1:
             parentInstance?.navigationController?.pushViewController(MyAccountActivityController() , animated: true)
-//            parent.pushViewController(MyAccountActivityController(collectionViewLayout: layout) , animated: true)
         case 2:
-           // navigationItem.title = ""
             parentInstance?.navigationController?.pushViewController(PastStayController(), animated: true)
         case 3:
             print("0 Clicked")
@@ -51,19 +52,19 @@ extension MyAccountMainCell: UITableViewDelegate{
 
 
 
-extension MyAccount: UITableViewDataSource{
+extension MyAccount{
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MyAccountMainCell", for: indexPath) as! MyAccountMainCell
-        cell.parentInstance = self
-        return cell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        myAccountCell.parentInstance = self
+        return myAccountCell
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return view.frame.height
     }
 
@@ -73,27 +74,8 @@ extension MyAccount: UITableViewDataSource{
 
 }
 
-extension MyAccount: UITableViewDelegate{
+extension MyAccount{
 
-//        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//            switch indexPath.row {
-//            case 0:
-//                print("0 Clicked")
-//            case 1:
-//                navigationItem.title = ""
-//                let layout = UICollectionViewFlowLayout()
-//                layout.scrollDirection = .horizontal
-//                layout.minimumLineSpacing = 0
-//                navigationController?.pushViewController(MyAccountActivityController(collectionViewLayout: layout) , animated: true)
-//            case 2:
-//                navigationItem.title = ""
-//                navigationController?.pushViewController(PastStayController(), animated: true)
-//            case 3:
-//                print("0 Clicked")
-//            default:
-//                print("Clicked")
-//            }
-//        }
 }
 
 

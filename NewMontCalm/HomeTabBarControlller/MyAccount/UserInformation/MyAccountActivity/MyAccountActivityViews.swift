@@ -39,9 +39,10 @@ extension MyAccountActivityCell{
         pointsEarnView.backgroundColor = .white
 
 
+        let dateView = CheckInCheckOutView()
         addSubview(bookingIdView)
         addSubview(bookingDateView)
-        addSubview(reservationDateView)
+        addSubview(dateView)
         addSubview(pointsEarnView)
         addSubview(conditionButton)
 
@@ -58,11 +59,11 @@ extension MyAccountActivityCell{
         bookingDateView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.1).isActive = true
         bookingDateLbl.anchorWithConstantsToTop(top: bookingDateView.topAnchor, left: bookingDateView.leftAnchor, bottom: bookingDateView.bottomAnchor, right: bookingDateView.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
 
-        reservationDateView.anchorWithConstantsToTop(top: bookingIdView.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
-        reservationDateView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.2).isActive = true
+        //addSubview(dateView)
+        dateView.anchorWithConstantsToTop(top: bookingDateView.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+        dateView.heightAnchor.constraint(equalToConstant: Constants.StandardSize.TABLEROWHEIGHT * 0.6).isActive = true
 
-
-        pointsEarnView.anchorWithConstantsToTop(top: reservationDateView.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+        pointsEarnView.anchorWithConstantsToTop(top: dateView.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
         pointsEarnView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.06).isActive = true
         pointsEarnLbl.anchorWithConstantsToTop(top: pointsEarnView.topAnchor, left: pointsEarnView.leftAnchor, bottom: pointsEarnView.bottomAnchor, right: pointsEarnView.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
 

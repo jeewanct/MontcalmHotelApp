@@ -25,7 +25,7 @@ class PersonaliseController: UICollectionViewController {
         collectionView?.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         collectionView?.register(PersonliseCell.self, forCellWithReuseIdentifier: "PersonaliseCell")
         navigationItem.title = "Personalise Your Stay"
-       collectionView?.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0 )
+         collectionView?.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0 )
         collectionView?.isPagingEnabled = true
         collectionView?.showsHorizontalScrollIndicator = false
         
@@ -96,6 +96,8 @@ class PersonaliseController: UICollectionViewController {
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
+    
+    
 
     let containerView: CardView = {
         let containerView = CardView()

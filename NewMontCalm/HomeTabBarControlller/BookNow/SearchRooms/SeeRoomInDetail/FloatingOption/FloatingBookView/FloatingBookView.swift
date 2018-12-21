@@ -10,6 +10,10 @@ import UIKit
 
 class FloatingBookView: UIView {
 
+
+    var hotelDetailData: HotelDetailModel?
+    var OpenRoomDetailsDelegate: OpenRoomDetails?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)

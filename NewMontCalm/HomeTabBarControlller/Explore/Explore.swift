@@ -17,8 +17,20 @@ class Explore: UITableViewController {
         setup()
         // Do any additional setup after loading the view, typically from a nib.
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.hidesBarsOnSwipe = true
+        tabBarController?.tabBar.isHidden = false
+        navigationItem.title = "Explore"
+      
+    }
     
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationItem.title = ""
+        
+    }
     
     func setup(){
         tableView.register(ExploreCell.self, forCellReuseIdentifier: "ExploreCell")
@@ -29,7 +41,7 @@ class Explore: UITableViewController {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationItem.title = "Explore"
+        
         
         
        // self.edgesForExtendedLayout = [.bottom]

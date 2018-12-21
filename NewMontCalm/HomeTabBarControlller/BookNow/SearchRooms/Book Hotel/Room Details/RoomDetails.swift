@@ -9,12 +9,17 @@
 import UIKit
 
 class RoomDetails: UIViewController {
-    
+
+    var roomId: String?
+    var roomData: RoomDetailModel?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         addViews()
-    
+
+        self.performSelector(inBackground: #selector(getRoomDetails), with: nil)
+        print("The room id is ", roomId)
     }
     
     func setup(){
@@ -23,7 +28,7 @@ class RoomDetails: UIViewController {
 
         navigationController?.hidesBarsOnSwipe = false
         view.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
-        navigationItem.title = "Room Details"
+        title = "Room Details"
         
     }
     
@@ -36,6 +41,7 @@ class RoomDetails: UIViewController {
         tv.showsVerticalScrollIndicator = false
         tv.separatorStyle = .none
         tv.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
+        tv.rowHeight = UITableViewAutomaticDimension 
         tv.register(RoomDetailsCell.self, forCellReuseIdentifier: "RoomDetailsCell")
         return tv
     }()

@@ -20,20 +20,9 @@ class SocialNetworkingView: UIView {
 
     func addViews(){
 
-        let findthemontcalmLabel = UILabel()
-        findthemontcalmLabel.translatesAutoresizingMaskIntoConstraints = true
-        findthemontcalmLabel.text = "Find The Montlm Elsewhere:"
-        findthemontcalmLabel.textAlignment = .center
-        findthemontcalmLabel.font = UIFont(name: findthemontcalmLabel.font.fontName, size: 14)
 
-        addSubview(findthemontcalmLabel)
-        findthemontcalmLabel.anchorToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor)
-        findthemontcalmLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        findthemontcalmLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
         addSubview(socialNetworkingCollectionView)
-
-
-        socialNetworkingCollectionView.topAnchor.constraint(equalTo: findthemontcalmLabel.bottomAnchor, constant: 8).isActive = true
+        socialNetworkingCollectionView.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
         socialNetworkingCollectionView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         socialNetworkingCollectionView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         socialNetworkingCollectionView.widthAnchor.constraint(equalToConstant: 20 * 4 + 16 * 3 ).isActive = true

@@ -9,4 +9,7 @@ target 'NewMontCalm' do
   	pod 'GoogleMaps'
   	pod 'GooglePlaces'
 	pod 'JTAppleCalendar', '~> 7.0'
+	pod 'PINRemoteImage'
+	pod 'Alamofire', '~> 4.5'
+
 end

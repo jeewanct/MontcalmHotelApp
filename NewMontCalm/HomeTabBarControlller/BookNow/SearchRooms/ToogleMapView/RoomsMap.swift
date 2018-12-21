@@ -9,21 +9,27 @@
 import UIKit
 import GoogleMaps
 
+
+
 class RoomsMap: UIViewController{
-    var placesScreen: SelectedHotelCollectionView?
+
+    var hotelList: [ListOfAvailableHotels]?
+   // var availableHotelsList: [ListOfAvailableHotels]?
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMap()
-        setup()
+        placesScreenOn()
     }
-    
-    func setup(){
-        
+
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.tabBar.isHidden = true
+        navigationController?.hidesBarsOnSwipe = false
     }
-    
+
     func setupMap(){
-        let camera = GMSCameraPosition.camera(withLatitude: -33.86, longitude: 151.20, zoom: 15)
-        let mapView = GMSMapView.map(withFrame: .zero, camera: camera)
+
         
         // Importing google map style from json
         do{
@@ -37,43 +43,55 @@ class RoomsMap: UIViewController{
         self.view = mapView
         
         // Adding Marker on map
+        if let gethotelList = hotelList{
+
+            for index in gethotelList{
+                if let markerLat = index.hotelLat, let markerLang = index.hotelLang{
+                    let marker = GMSMarker()
+                    let markerView = UIImageView(image: #imageLiteral(resourceName: "marker").withRenderingMode(.alwaysTemplate))
+                    //changing the tint color of the image
+                    markerView.tintColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
+                    marker.iconView = markerView
+                    marker.position = CLLocationCoordinate2D(latitude: CLLocationDegrees(markerLat)! , longitude: CLLocationDegrees(markerLang)!)
+                    marker.map = mapView
+
+
+                }
+            }
+
+        }
         // let markers = [GMSMarker()]
-        let marker = GMSMarker()
-        marker.icon = #imageLiteral(resourceName: "marker").withRenderingMode(.alwaysTemplate)
-        marker.iconView?.tintColor = #colorLiteral(red: 0.3254901961, green: 0.3254901961, blue: 0.3254901961, alpha: 1)
-        marker.position = CLLocationCoordinate2D(latitude: -33.86, longitude: 151.20)
-        marker.map = mapView
         
     }
+
     
     func placesScreenOn(){
+        placesCollectionView.hotelList = hotelList
+
+        placesCollectionView.parentInstance = self
+        view.addSubview(placesCollectionView)
+        placesCollectionView.anchorToTop(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        placesCollectionView.heightAnchor.constraint(equalToConstant: Constants.StandardSize.TABLEROWHEIGHT + 64).isActive = true
+    }
+    
+
+    let mapView: GMSMapView = {
+        let camera = GMSCameraPosition.camera(withLatitude: 51.527669000000003, longitude: -0.089038999999999993, zoom: 17)
+        let mapView = GMSMapView.map(withFrame: .zero, camera: camera)
+        return mapView
+    }()
+
+    let placesCollectionView: SelectedHotelCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 10
         layout.headerReferenceSize = CGSize(width: 32, height: 0)
         layout.footerReferenceSize   = CGSize(width: 32, height: 0)
-        placesScreen = SelectedHotelCollectionView(frame: .zero, collectionViewLayout: layout)
-        view.addSubview(placesScreen!)
-        placesScreen?.anchorToTop(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
-        placesScreen?.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3).isActive = true
-        placesScreen?.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height * 0.3)
-        UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.6, options: .curveEaseIn, animations: {
-            self.placesScreen?.transform = .identity
-        }, completion: nil)
-        
-    }
-    
-    func placesScreenOff(){
-        UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.6, options: .curveEaseIn, animations: {
-            self.placesScreen?.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height * 0.3)
-        }, completion: {_ in
-            self.placesScreen?.removeFromSuperview()
-            self.placesScreen = nil
-        })
-        
-        
-    }
+        let placesScreen = SelectedHotelCollectionView(frame: .zero, collectionViewLayout: layout)
+        placesScreen.translatesAutoresizingMaskIntoConstraints = false
+        return placesScreen
+    }()
     
     
 }

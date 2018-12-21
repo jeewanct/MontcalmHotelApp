@@ -22,17 +22,12 @@ class CalendarHeader: JTAppleCollectionReusableView{
     }
 
     func addViews(){
-        addSubview(monthLabel)
-        monthLabel.leftAnchor.constraint(equalTo: leftAnchor,constant: 8).isActive = true
-        monthLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        monthLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
-        monthLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
-
-        addSubview(yearLabel)
-        yearLabel.leftAnchor.constraint(equalTo: monthLabel.rightAnchor).isActive = true
-        yearLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        yearLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
-        yearLabel.rightAnchor.constraint(equalTo: rightAnchor,constant: -8).isActive = true
+        addSubview(monthLabelYearLabel)
+        monthLabelYearLabel.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+        monthLabelYearLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
+        
+        
+        
 
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +36,7 @@ class CalendarHeader: JTAppleCollectionReusableView{
         view.leftAnchor.constraint(equalTo: leftAnchor,constant:8).isActive = true
         view.rightAnchor.constraint(equalTo: rightAnchor,constant: -8).isActive = true
         view.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        view.topAnchor.constraint(equalTo: yearLabel.bottomAnchor).isActive = true
+        view.topAnchor.constraint(equalTo: monthLabelYearLabel.bottomAnchor).isActive = true
 
 
 
@@ -58,9 +53,6 @@ class CalendarHeader: JTAppleCollectionReusableView{
         _ = weeks(name: "Thur")
         _ = weeks(name: "Fri")
         _ = weeks(name: "Sat")
-
-
-
 
     }
 
@@ -80,23 +72,17 @@ class CalendarHeader: JTAppleCollectionReusableView{
         fatalError("init(coder:) has not been implemented")
     }
 
-    let monthLabel: UILabel = {
+    let monthLabelYearLabel: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.font = UIFont(name: lbl.font.fontName, size: 20)
+        lbl.font = UIFont.boldSystemFont(ofSize: 16)
         lbl.text = "September"
-        lbl.textAlignment = .left
+        lbl.textColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
+        lbl.textAlignment = .center
         return lbl
     }()
 
-    let yearLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.font = UIFont(name: lbl.font.fontName, size: 20)
-        lbl.textAlignment = .right
-        lbl.text = "'17"
-        return lbl
-    }()
+    
 
     let stackView: UIStackView = {
         let sv = UIStackView()

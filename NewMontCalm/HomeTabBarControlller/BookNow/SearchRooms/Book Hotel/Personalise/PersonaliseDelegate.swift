@@ -65,6 +65,8 @@ extension PersonliseCell: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = EnhancmentHeaderView()
+        headerView.headerNumber = section
+        headerView.parentInstance = self
         return headerView
     }
 
@@ -77,21 +79,26 @@ extension PersonliseCell: UITableViewDataSource {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 20
+        return contentData.count
     }
-
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 0
+        return UIScreen.main.bounds.height * 0.065
     }
+
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if contentData[section] == false{
+            return 0
+        }
+        
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PersonaliseTableCell", for: indexPath) as! PersonaliseTable
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PersonaliseTableCell", for: indexPath) as! PersonaliseTableCell
         cell.selectionStyle = .none
         return cell
     }
@@ -105,11 +112,6 @@ extension PersonliseCell: UITableViewDataSource {
 
 
             }, completion: nil)
-
-
-
-
-
 
 
             //  bookHotelNowInstance?.collectionView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)

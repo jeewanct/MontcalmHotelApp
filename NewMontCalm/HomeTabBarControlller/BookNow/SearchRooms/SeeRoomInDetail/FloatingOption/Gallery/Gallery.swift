@@ -13,6 +13,9 @@ import UIKit
 
 class Gallery: UIView {
 
+
+    var galleryData: [PhotosModel]?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
@@ -32,6 +35,7 @@ class Gallery: UIView {
         cv.isPagingEnabled = true
         cv.dataSource = self
         cv.tag = 0
+        cv.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         cv.showsHorizontalScrollIndicator = false
         cv.register(GalleryCell.self, forCellWithReuseIdentifier: "GalleryCell")
         cv.translatesAutoresizingMaskIntoConstraints = false
@@ -53,13 +57,5 @@ class Gallery: UIView {
         return cv
     }()
 
-    let pager: UIPageControl = {
-        let pager = UIPageControl()
-        pager.translatesAutoresizingMaskIntoConstraints = false
-        pager.pageIndicatorTintColor = .white
-        pager.currentPage = 0
-        pager.currentPageIndicatorTintColor = .orange
-        pager.numberOfPages = 10
-        return pager
-    }()
+    
 }

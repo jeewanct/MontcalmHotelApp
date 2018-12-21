@@ -16,12 +16,13 @@ extension FloatingOffers: UITableViewDataSource{
         return Constants.StandardSize.TABLEROWHEIGHT + UIScreen.main.bounds.height * 0.07
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return offersList?.count ?? 0 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FloatingOffersCell", for: indexPath) as! FloatingOffersCell
         cell.selectionStyle = .none
+        cell.offersDetails = offersList?[indexPath.item]
         return cell
     }
 }

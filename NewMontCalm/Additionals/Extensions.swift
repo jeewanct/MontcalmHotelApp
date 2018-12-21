@@ -8,6 +8,10 @@
 
 import UIKit
 
+
+//MARK: Constraints
+
+
 extension UIView{
     func anchorToTop(top: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil,right: NSLayoutXAxisAnchor? = nil) {
         
@@ -36,38 +40,62 @@ extension UIView{
     }
 }
 
-// Download image
 
+extension UIView{
 
-let imageCache = NSCache<NSString, AnyObject>()
-
-extension UIImageView {
-    func downloadImage(imagePath: String){
-        let url = URL(string: imagePath)
-        self.image = nil
-
-        // check cached image
-        if let cachedImage = imageCache.object(forKey: imagePath as NSString) as? UIImage {
-            self.image = cachedImage
-            return
-        }
-
-        // if not, download image from url
-        URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
-            if error != nil {
-                print(error!)
-                return
-            }
-
-            DispatchQueue.main.async {
-                if let image = UIImage(data: data!) {
-                    imageCache.setObject(image, forKey: imagePath as NSString)
-                    self.image = image
-                }
-            }
-
-        }).resume()
+    func staticLabels(title: String, title2: String) -> UILabel {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.minimumScaleFactor = 0.1
+        lbl.attributedText = lbl.convertAttributeString(firstString: title, secondString: title2, firstColor: .black, secondColor: Constants.Appearance.PRIMARYCOLOR)
+        lbl.font =  UIFont.boldSystemFont(ofSize: 15)
+        return lbl
     }
+
+    func staticLabelsWithTextColor(title: String, textColor: UIColor) -> UILabel {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.minimumScaleFactor = 0.1
+        lbl.textColor = textColor
+        lbl.text = title
+        lbl.font =  UIFont.boldSystemFont(ofSize: 15)
+        lbl.numberOfLines = 0
+        return lbl
+    }
+
 }
 
+extension UILabel{
+
+
+
+
+
+
+    func convertAttributeString(firstString: String, secondString: String, firstColor: UIColor, secondColor: UIColor) -> NSMutableAttributedString{
+        let convertedString =  NSMutableAttributedString(string: firstString, attributes: [NSAttributedStringKey.foregroundColor:firstColor] )
+        convertedString.append(NSMutableAttributedString(string: secondString, attributes: [NSAttributedStringKey.foregroundColor: secondColor]))
+        return convertedString
+    }
+
+
+    func convertAttributeStringWithUnderLine(firstString: String, secondString: String) -> NSMutableAttributedString{
+        let convertedString =  NSMutableAttributedString(string: firstString, attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.5058823529, green: 0.5058823529, blue: 0.5058823529, alpha: 1)] )
+        convertedString.append(NSMutableAttributedString(string: secondString, attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1) , NSAttributedStringKey.underlineColor : #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1) , NSAttributedStringKey.underlineStyle: NSUnderlineStyle.styleSingle.rawValue ]))
+        return convertedString
+    }
+
+    func buttonIcons(image: UIImage) -> UIImageView{
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.clipsToBounds = true
+        iv.image = image.withRenderingMode(.alwaysTemplate)
+        iv.tintColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
+        iv.contentMode = .scaleAspectFit
+        return iv
+    }
+    
+}
 

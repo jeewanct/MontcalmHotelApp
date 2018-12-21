@@ -37,74 +37,95 @@ extension SearchRoomCell{
     func addViews(){
 
 
+
+
         let cardView = CardView()
         addSubview(cardView)
-        cardView.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
+        addSubview(bookHotelButton)
 
-        addSubview(backgroundImage)
-        backgroundImage.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
-
-
-        let blackView = BlackView()
-        addSubview(blackView)
-        blackView.anchorToTop(top: backgroundImage.topAnchor, left: backgroundImage.leftAnchor, bottom: backgroundImage.bottomAnchor, right: backgroundImage.rightAnchor)
+        
+        cardView.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: bookHotelButton.bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
 
         addSubview(hotelNameText)
-        hotelNameText.anchorWithConstantsToTop(top: backgroundImage.topAnchor, left: backgroundImage.leftAnchor, bottom: nil, right: backgroundImage.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16)
-
-        addSubview(callButton)
-        callButton.anchorWithConstantsToTop(top: hotelNameText.bottomAnchor, left: backgroundImage.leftAnchor, bottom: nil, right: nil, topConstant: 8, leftConstant: 16, bottomConstant: 0, rightConstant: 0)
-        callButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40)/2).isActive = true
-        callButton.heightAnchor.constraint(equalTo: backgroundImage.heightAnchor, multiplier: 0.1).isActive = true
-
-        addSubview(whatsAppButton)
-        whatsAppButton.anchorWithConstantsToTop(top: hotelNameText.bottomAnchor, left: callButton.rightAnchor, bottom: nil, right: nil, topConstant: 8, leftConstant: 8, bottomConstant: 0, rightConstant: 0)
-        whatsAppButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40)/2).isActive = true
-        whatsAppButton.heightAnchor.constraint(equalTo: backgroundImage.heightAnchor, multiplier: 0.1).isActive = true
+        hotelNameText.anchorWithConstantsToTop(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 32, bottomConstant: 4, rightConstant: 32 )
 
 
-        addSubview(uberButton)
-        uberButton.anchorWithConstantsToTop(top: whatsAppButton.bottomAnchor, left: backgroundImage.leftAnchor, bottom: nil, right: nil, topConstant: 8, leftConstant: 16, bottomConstant: 0, rightConstant: 0)
-        uberButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40)/2).isActive = true
-        uberButton.heightAnchor.constraint(equalTo: backgroundImage.heightAnchor, multiplier: 0.1).isActive = true
 
-
-        addSubview(distanceButton)
-        distanceButton.anchorWithConstantsToTop(top: nil, left: backgroundImage.leftAnchor, bottom: backgroundImage.bottomAnchor, right: nil, topConstant: 0, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
-        distanceButton.heightAnchor.constraint(equalTo: backgroundImage.heightAnchor, multiplier: 0.1).isActive = true
-        distanceButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40) / 2.5 ).isActive = true
-
+        let locationImage = hotelNameText.buttonIcons(image: #imageLiteral(resourceName: "marker"))
+        addSubview(locationImage)
 
         addSubview(locationButton)
-        locationButton.anchorWithConstantsToTop(top: nil, left: distanceButton.rightAnchor, bottom: backgroundImage.bottomAnchor, right: backgroundImage.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 16, rightConstant: 16)
-        locationButton.heightAnchor.constraint(equalTo: backgroundImage.heightAnchor, multiplier: 0.1).isActive = true
+        locationButton.anchorWithConstantsToTop(top: hotelNameText.bottomAnchor, left: locationImage.rightAnchor, bottom: nil, right: nil, topConstant: 16, leftConstant: 4, bottomConstant: 16, rightConstant: 16)
+        locationButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 112) / 1.5).isActive = true
 
 
 
-        addSubview(starRatingLabel)
-        starRatingLabel.anchorWithConstantsToTop(top: nil, left: backgroundImage.leftAnchor, bottom: locationButton.topAnchor, right: nil, topConstant: 8, leftConstant: 16, bottomConstant: 0, rightConstant: 0)
-        starRatingLabel.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40)/1.5).isActive = true
-        starRatingLabel.heightAnchor.constraint(equalTo: backgroundImage.heightAnchor, multiplier: 0.1).isActive = true
+        locationImage.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        locationImage.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        locationImage.centerYAnchor.constraint(equalTo: locationButton.centerYAnchor).isActive = true
+        locationImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
+
+
+
+        let milesImage = hotelNameText.buttonIcons(image: #imageLiteral(resourceName: "miles"))
+        addSubview(milesImage)
+
+
+        addSubview(milesButton)
+        milesButton.anchorWithConstantsToTop(top: hotelNameText.bottomAnchor, left: milesImage.rightAnchor, bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 4, bottomConstant: 4, rightConstant: 32)
+
+
+        milesImage.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        milesImage.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        milesImage.centerYAnchor.constraint(equalTo: milesButton.centerYAnchor).isActive = true
+        milesImage.leftAnchor.constraint(equalTo: locationButton.rightAnchor, constant: 8).isActive = true
+
+
+
+
+        let callImage = hotelNameText.buttonIcons(image: #imageLiteral(resourceName: "call-answer"))
+        addSubview(callImage)
+
+        addSubview(callButton)
+        callButton.anchorWithConstantsToTop(top: locationButton.bottomAnchor , left: callImage.rightAnchor, bottom: nil, right: nil, topConstant: 12, leftConstant: 4, bottomConstant: 4, rightConstant: 16)
+
+        callButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 112) / 2).isActive = true
+
+
+        callImage.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        callImage.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        callImage.centerYAnchor.constraint(equalTo: callButton.centerYAnchor).isActive = true
+        callImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
+
+
+        let whatsAppImage = hotelNameText.buttonIcons(image: #imageLiteral(resourceName: "whatsapp-logo"))
+        addSubview(whatsAppImage)
+
+        addSubview(whatsAppButton)
+        whatsAppButton.anchorWithConstantsToTop(top: locationButton.bottomAnchor, left: whatsAppImage.rightAnchor, bottom: nil, right: rightAnchor, topConstant: 12, leftConstant: 4, bottomConstant: 4, rightConstant: 32)
+
+
+        whatsAppImage.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        whatsAppImage.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        whatsAppImage.centerYAnchor.constraint(equalTo: whatsAppButton.centerYAnchor).isActive = true
+        whatsAppImage.leftAnchor.constraint(equalTo: callButton.rightAnchor, constant: 8).isActive = true
+
+
+
+
+
 
         addSubview(startFromLabel)
-        startFromLabel.anchorWithConstantsToTop(top: nil, left: backgroundImage.leftAnchor, bottom: starRatingLabel.topAnchor, right: nil, topConstant: 8, leftConstant: 16, bottomConstant: 0, rightConstant: 0)
-        startFromLabel.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 40)/1.5).isActive = true
-        startFromLabel.heightAnchor.constraint(equalTo: backgroundImage.heightAnchor, multiplier: 0.1).isActive = true
+        startFromLabel.anchorWithConstantsToTop(top: callButton.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 4, leftConstant: 32, bottomConstant: 16, rightConstant: 16)
+
+
+        bookHotelButton.anchorWithConstantsToTop(top: startFromLabel.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+        bookHotelButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.065).isActive = true
 
 
 
 
-//        addSubview(callButton)
-//        callButton.anchorWithConstantsToTop(top: backgroundImage.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 8, leftConstant: 16, bottomConstant: 8, rightConstant: 16)
-//        callButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 48) / 3 ).isActive = true
-//
-//        addSubview(uberButton)
-//        uberButton.anchorWithConstantsToTop(top: backgroundImage.bottomAnchor, left: callButton.rightAnchor, bottom: bottomAnchor, right: nil, topConstant: 8, leftConstant: 8, bottomConstant: 8, rightConstant: 0)
-//        callButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 48) / 3 ).isActive = true
-//
-//        addSubview(bookNowButton)
-//        bookNowButton.anchorWithConstantsToTop(top: backgroundImage.bottomAnchor, left: uberButton.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 8, leftConstant: 8, bottomConstant: 8, rightConstant: 16)
-//        bookNowButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 48) / 3 ).isActive = true
+
 
 
 

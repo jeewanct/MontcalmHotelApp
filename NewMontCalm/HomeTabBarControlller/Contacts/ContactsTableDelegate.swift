@@ -11,7 +11,7 @@ import UIKit
 extension Contacts{
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return  10 // hotelList?.list?.count ?? 0
+        return hotelList?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -20,36 +20,68 @@ extension Contacts{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsCell", for: indexPath) as! ContactsCell
-       // cell.hotelList = hotelList?.list?[indexPath.item]
+        cell.hotelList = hotelList?[indexPath.item]
+        cell.selectionStyle = .none
+        cell.parentInstance = self
         return cell
     }
 }
 
 
 extension Contacts{
-    func apiCall(){
+    
+    
+    @objc func stopAnimation(){
+        
+        activityIndicator.close()
+    }
+    
+    @objc func handleApiCall(){
 
-        ApiService.shared.postMethod(url: Constants.CustomApis.HOMEURL + Constants.CustomApis.HOTELLIST, bodyParameter: ["checkIn":"2017-10-12","checkOut":"2017-10-13"]) { (data) in
 
-
-
-            do{
-                // print(try JSONSerialization.jsonObject(with: data, options: .mutableContainers))
-
-                self.hotelList = try JSONDecoder().decode(SearchRoomModel.self, from: data)
-
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-
-            }catch _ {
-
+        let obj = ViewControllersHTTPRequest()
+        obj.getHomeContactDetails1(userInfo: [:], completion: { (data) in
+            if let hotelLists = data.hotelList{
+                self.performSelector(onMainThread: #selector(self.stopAnimation), with: nil, waitUntilDone: false)
+                self.hotelList = hotelLists
             }
 
+            self.tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+
+           // self.tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+        }) { (error) in
+            self.performSelector(onMainThread: #selector(self.stopAnimation), with: nil, waitUntilDone: false)
         }
 
+
+
+
+
+//        let obj = ViewControllersHTTPRequest()
+//        obj.getHomeContactDetails(completion: { (data) in
+//            if let hotelLists = data.hotelList{
+//                self.performSelector(onMainThread: #selector(self.stopAnimation), with: nil, waitUntilDone: false)
+//                self.hotelList = hotelLists
+//            }
+//
+//            self.tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+//        }) { (error) in
+//            self.performSelector(onMainThread: #selector(self.stopAnimation), with: nil, waitUntilDone: false)
+//        }
     }
+
+
 }
 
+
+extension ContactsCell{
+
+    @objc func handleLocation(){
+
+        let roomsMapObj = RoomsMap()
+        roomsMapObj.hotelList = parentInstance?.hotelList
+        parentInstance?.navigationController?.pushViewController(roomsMapObj, animated: true)
+    }
+}
 
 

@@ -35,18 +35,13 @@ extension PastStayController{
         
         
         
-        view.addSubview(secondView)
-        secondView.anchorWithConstantsToTop(top: selectHotelButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
-        secondView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15).isActive = true
-        secondView.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 48) / 2).isActive = true
-        
-        
-        view.addSubview(thirdView)
-        thirdView.anchorWithConstantsToTop(top: selectHotelButton.bottomAnchor, left: secondView.rightAnchor, bottom: nil, right: view.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
-        thirdView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15).isActive = true
+        let dateView = CheckInCheckOutView()
+        view.addSubview(dateView)
+        dateView.anchorWithConstantsToTop(top: selectHotelButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 8, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+        dateView.heightAnchor.constraint(equalToConstant: Constants.StandardSize.TABLEROWHEIGHT * 0.6).isActive = true
         
         view.addSubview(bookingReferenceText)
-        bookingReferenceText.anchorWithConstantsToTop(top: thirdView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
+        bookingReferenceText.anchorWithConstantsToTop(top: dateView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16)
         bookingReferenceText.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.07).isActive = true
         
         

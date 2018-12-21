@@ -13,6 +13,7 @@ class LoginRegisterCell: UITableViewCell{
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         addViews()
         setup()
     }
@@ -43,11 +44,24 @@ class LoginRegisterCell: UITableViewCell{
     }
     
     // UI Elements
-    
+
+    let headerText: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.textColor = Constants.Appearance.PRIMARYCOLOR
+        lbl.text = "The Montcalm Club Members Login"
+        lbl.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
+        lbl.textAlignment = .center
+        return lbl
+    }()
+
+
+
+
     let emailText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "Email"
+        tf.placeholder = "Membership ID"
         let view = UIView(frame: CGRect(x: 24, y: 0, width: 24, height: 0))
         tf.leftView = view
         tf.keyboardType = .emailAddress
@@ -66,7 +80,7 @@ class LoginRegisterCell: UITableViewCell{
         tf.isSecureTextEntry = true
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
-        tf.placeholder = "Reservation ID"
+        tf.placeholder = "Password"
         return tf
     }()
     
@@ -74,10 +88,10 @@ class LoginRegisterCell: UITableViewCell{
         let btn = UIButton(type: .system)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.backgroundColor = #colorLiteral(red: 0.3254901961, green: 0.3254901961, blue: 0.3254901961, alpha: 1)
-        btn.setTitle("VIEW BOOKING", for: .normal)
+        btn.setTitle("LOG IN", for: .normal)
         btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
-        btn.addTarget(self, action: #selector(handleLoginButton), for: .touchUpInside)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+       // btn.addTarget(self, action: #selector(handleLoginButton), for: .touchUpInside)
         return btn
     }()
     
@@ -85,11 +99,21 @@ class LoginRegisterCell: UITableViewCell{
         let btn = UIButton(type: .system)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.backgroundColor = #colorLiteral(red: 0.6705882353, green: 0.5607843137, blue: 0.3333333333, alpha: 1)
-        btn.setTitle("LOGIN", for: .normal)
-        btn.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
-        btn.titleLabel?.font = UIFont(name: Constants.Fonts.FONTREGULAR, size: 17)
+        btn.setTitle("SIGN UP TO THE MONTCALM CLUB", for: .normal)
+      //  btn.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
+        btn.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 15)
         btn.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
         return btn
+    }()
+
+    
+    
+    let activityIndicator: UIActivityIndicatorView = {
+        let activityView = UIActivityIndicatorView()
+        activityView.translatesAutoresizingMaskIntoConstraints = false
+        activityView.activityIndicatorViewStyle = .whiteLarge
+        activityView.isHidden = true
+        return activityView
     }()
     
 }
